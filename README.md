@@ -1,7 +1,7 @@
 # Shop_ResaleWebApplication
 ![1456080627-146661](https://github.com/BuenosDiasGente/Shop_ResaleWebApplication/assets/123076580/c7e56ffa-8061-439a-9547-a95278e58bd2)
 
-_Командная работа курса "Профессия  Java-разработчик IND3.0" платформы SkyPro_
+_Командная работа курса "Профессия  Java-разработчик" платформы SkyPro_
 
 #### Демо:
 
