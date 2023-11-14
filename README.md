@@ -1,5 +1,6 @@
 # Shop_ResaleWebApplication
-<img alt="y4kogpppJNJW.png" src="..%2F..%2F..%2FDesktop%2Freadme%2Fy4kogpppJNJW.png"/>
+![Uploading y4kogpppJNJW.png…]()
+
 _Командная работа курса "Профессия  Java-разработчик IND3.0" платформы SkyPro_
 
 #### Демо:
