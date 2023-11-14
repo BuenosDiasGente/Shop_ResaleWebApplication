@@ -1,5 +1,5 @@
 # Shop_ResaleWebApplication
-![Uploading y4kogpppJNJW.png…]()
+![KkvNeBBBnPRd](https://github.com/BuenosDiasGente/Shop_ResaleWebApplication/assets/123076580/3d4e275d-e0cc-47eb-bb0b-af80a5a289fc) 
 
 _Командная работа курса "Профессия  Java-разработчик IND3.0" платформы SkyPro_
 
