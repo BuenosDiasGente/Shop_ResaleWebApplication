@@ -20,6 +20,11 @@ public class AuthController {
 
     private final AuthService authService;
 
+    /**
+     * авторизация пользователя.
+     * @param login
+     * @return status 200 or 401.
+     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO login) {
         if (authService.login(login.getUsername(), login.getPassword())) {
@@ -29,6 +34,11 @@ public class AuthController {
         }
     }
 
+    /**
+     * регистрация нового пользователя.
+     * @param register
+     * @return
+     */
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterDTO register) {
         if (authService.register(register)) {

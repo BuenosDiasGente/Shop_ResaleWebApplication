@@ -11,7 +11,14 @@ import ru.skypro.homework.service.AuthService;
 @Service
 public class AuthServiceImpl implements AuthService {
 
+    /**
+     * Интерфейс предоставляет основную информацию о пользователе.
+     */
     private final UserDetailsManager manager;
+
+    /**
+     * Интерфейс для выполнения односторонего преобразования пароля с целью его безопасного хранения
+     */
     private final PasswordEncoder encoder;
 
     public AuthServiceImpl(UserDetailsManager manager,
@@ -20,6 +27,13 @@ public class AuthServiceImpl implements AuthService {
         this.encoder = passwordEncoder;
     }
 
+    /**
+     * авторизация пользователя
+     *
+     * @param userName
+     * @param password
+     * @return true or false
+     */
     @Override
     public boolean login(String userName, String password) {
         if (!manager.userExists(userName)) {
@@ -29,6 +43,12 @@ public class AuthServiceImpl implements AuthService {
         return encoder.matches(password, userDetails.getPassword());
     }
 
+    /**
+     * регистрация пользователя
+     *
+     * @param register
+     * @return
+     */
     @Override
     public boolean register(RegisterDTO register) {
         if (manager.userExists(register.getUsername())) {
@@ -42,6 +62,7 @@ public class AuthServiceImpl implements AuthService {
                         .roles(register.getRole().name())
                         .build());
         return true;
+        //сохранение в базу данных
     }
 
 }

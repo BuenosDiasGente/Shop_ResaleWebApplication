@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 public class AdsDTO {
-    Integer quantity;
+    private Integer quantity;
 
-    List<Ad> allAds;
+    private List<Ad> allAds;
 }
