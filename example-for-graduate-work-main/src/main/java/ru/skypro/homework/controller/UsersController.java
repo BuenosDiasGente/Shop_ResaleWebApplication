@@ -8,14 +8,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDTO;
+import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UsersDTO;
+import ru.skypro.homework.service.UsersService;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -29,6 +29,7 @@ import java.io.IOException;
         description = "Все методы для работы с пользователями системы")
 public class UsersController {
 
+    private final UsersService usersService;
 
     @Operation(
             summary = "Обновление пароля",
@@ -72,7 +73,7 @@ public class UsersController {
 
     @GetMapping("/me")
     public ResponseEntity<UsersDTO> getUser() {
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(usersService.getUser());
     }
 
     @Operation(
@@ -83,7 +84,7 @@ public class UsersController {
                             description = "Пользователь изменен",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = UsersDTO.class)
+                                    schema = @Schema(implementation = UpdateUserDTO.class)
                             )
                     ),
                     @ApiResponse(
@@ -92,10 +93,12 @@ public class UsersController {
                     )
             }
     )
+
     @PatchMapping("/me")
-    public ResponseEntity<?> updateUser(@RequestBody @Valid UsersDTO user) {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<UpdateUserDTO> updateUser(@RequestBody @Valid UpdateUserDTO updateUserDTO){
+        return ResponseEntity.ok(usersService.updateUser(updateUserDTO));
     }
+
 
     @Operation(
             summary = "Обновить аватар авторизованного пользователя",
