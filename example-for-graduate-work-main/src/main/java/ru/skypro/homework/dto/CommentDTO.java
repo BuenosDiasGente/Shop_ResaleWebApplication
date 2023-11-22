@@ -4,16 +4,16 @@ import lombok.Data;
 
 @Data
 public class CommentDTO {
-    Long id;
+    private Long id;
 
-    Integer userId; //Users??
+    private Integer userId; //Users??
 
-    String userImage;// Image??
+    private String userImage;// Image??
 
-    String name; //Users??
+    private String name; //Users??
 
-    Long timeOfCreation;
+    private Long timeOfCreation;
 
-    String commentText;
+    private String commentText;
 
 }

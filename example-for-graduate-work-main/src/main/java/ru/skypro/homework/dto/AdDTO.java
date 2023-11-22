@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AdDTO {
 
-    Long id;
+    private Long id;
 
-    Integer userId;//Users??
+    private Integer userId;//Users??
 
-    String  adImage;//Image??
+    private String  adImage;//Image??
 
-    String header;
-    Integer price;
-    String description;
+    private String header;
+    private Integer price;
+    private String description;
 }
