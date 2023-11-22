@@ -7,7 +7,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.homework.dto.CommentDTO;
+import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.service.CommentService;
 
@@ -31,15 +34,24 @@ public class CommentController {
                             description = "Комментарии получены",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = Comment.class)
+                                    schema = @Schema(implementation = CommentsDTO.class)
                             )
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not found"
                     )
+
             },
             tags = "Комментарии"
     )
     @GetMapping("/{id}/comments")
-    public List<Comment> getComments(@Parameter(description = "id объявления") @PathVariable Long adId) {
-        return commentService.getComments(adId);
+    public ResponseEntity<List<Comment>> getComments(@Parameter(description = "id объявления") @PathVariable Long id) {
+        return ResponseEntity.ok(commentService.getComments(id));
 
     }
 
@@ -51,15 +63,24 @@ public class CommentController {
                             description = "Комментарий добавлен",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = Comment.class)
+                                    schema = @Schema(implementation = CommentDTO.class)
                             )
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not found"
                     )
             },
             tags = "Комментарии"
     )
     @PostMapping("/{id}/comments")
-    public Comment addComments(@Parameter(description = "id объявления и текст комментария") @PathVariable Long adId, @RequestBody Comment comment) {
-        return commentService.addComment(adId, comment.getCommentText());
+    public ResponseEntity<Comment> addComments(@Parameter(description = "id объявления")
+                                               @PathVariable Long id, @RequestBody Comment comment) {
+        return ResponseEntity.ok(commentService.addComment(id, comment));
 
     }
 
@@ -72,8 +93,20 @@ public class CommentController {
                             description = "Комментарий удален",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = Comment.class)
+                                    schema = @Schema(implementation = CommentDTO.class)
                             )
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized"
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Forbidden"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not found"
                     )
             },
             tags = "Комментарии"
@@ -92,17 +125,28 @@ public class CommentController {
                             description = "Комментарий обновлен",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = Comment.class)
+                                    schema = @Schema(implementation = CommentDTO.class)
                             )
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized"
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Forbidden"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not found"
                     )
             },
             tags = "Комментарии"
     )
     @PatchMapping("/{adId}/comments/{commentId}")
-    public Comment patchComment(@Parameter(description = "id объявления и комментария, + текст комментария")
-                                @PathVariable Long adId, @PathVariable Long commentId, @RequestBody Comment comment) {
-        return commentService.patchComment(adId, commentId, comment.getCommentText());
-
+    public ResponseEntity<Comment> patchComment(@Parameter(description = "id объявления и комментария, + текст комментария")
+                                                @PathVariable Long adId, @PathVariable Long commentId, @RequestBody Comment comment) {
+        return ResponseEntity.ok(commentService.patchComment(adId, commentId, comment.getCommentText()));
 
     }
 }

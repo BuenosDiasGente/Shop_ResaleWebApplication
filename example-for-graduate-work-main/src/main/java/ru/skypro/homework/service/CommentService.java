@@ -8,7 +8,7 @@ public interface CommentService {
 
     List<Comment> getComments(Long adId);
 
-    Comment addComment(Long adId, String text); //здесь я не уверен какой id брать, вроде нужен объявления
+    Comment addComment(Long adId, Comment comment); //здесь я не уверен какой id брать, вроде нужен объявления
 
     void deleteComment(Long adId, Long commentId);
 
