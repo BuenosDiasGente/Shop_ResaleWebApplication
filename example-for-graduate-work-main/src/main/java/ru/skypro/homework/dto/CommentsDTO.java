@@ -7,6 +7,6 @@ import java.util.List;
 
 @Data
 public class CommentsDTO {
-    Integer quantity;
-    List<Comment> allComments;
+    private Integer quantity;
+    private List<Comment> allComments;
 }
