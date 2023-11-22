@@ -29,7 +29,7 @@ import java.io.IOException;
         description = "Все методы для работы с пользователями системы")
 public class UsersController {
 
-    private final UsersService usersService;
+  //  private final UsersService usersService;
 
     @Operation(
             summary = "Обновление пароля",
@@ -49,7 +49,7 @@ public class UsersController {
             }
     )
     @PostMapping("/set_password")
-    public ResponseEntity<?> updatePassword(@RequestBody @Valid NewPasswordDTO password) {
+    public ResponseEntity<Void> updatePassword(@RequestBody @Valid NewPasswordDTO password) {
         return ResponseEntity.ok().build();
     }
 
@@ -73,7 +73,8 @@ public class UsersController {
 
     @GetMapping("/me")
     public ResponseEntity<UsersDTO> getUser() {
-        return ResponseEntity.ok(usersService.getUser());
+        return ResponseEntity.ok().build();
+               // ResponseEntity.ok(usersService.getUser());
     }
 
     @Operation(
@@ -95,10 +96,10 @@ public class UsersController {
     )
 
     @PatchMapping("/me")
-    public ResponseEntity<UpdateUserDTO> updateUser(@RequestBody @Valid UpdateUserDTO updateUserDTO){
-        return ResponseEntity.ok(usersService.updateUser(updateUserDTO));
+    public ResponseEntity<UpdateUserDTO> updateUser(@RequestBody @Valid UpdateUserDTO updateUserDTO) {
+        return ResponseEntity.ok().build();
+                //ResponseEntity.ok(usersService.updateUser(updateUserDTO));
     }
-
 
     @Operation(
             summary = "Обновить аватар авторизованного пользователя",
@@ -114,7 +115,7 @@ public class UsersController {
             }
     )
     @PatchMapping(value = "/me/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image) throws IOException {
+    public ResponseEntity<Void> updateUserImage(@RequestBody MultipartFile image) throws IOException {
         return ResponseEntity.ok().build();
     }
 }

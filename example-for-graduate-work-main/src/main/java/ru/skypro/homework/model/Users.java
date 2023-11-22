@@ -3,26 +3,42 @@ package ru.skypro.homework.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import ru.skypro.homework.constants.Role;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "user_application")
 public class Users {
     @Id
-    private Long id;
+    @SequenceGenerator(name = "user_applicationSequence", sequenceName = "user_application_sequence", allocationSize = 1,
+            initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_applicationSequence")
+    private Integer id;
 
-    private String login;
-    private String name;
-    private String surname;
+    @Column(name = "login", unique = true)
+    private String email;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Column(name = "phone")
     private String phone;
-    private Role role;
-    @OneToOne
-    private Image image;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
 }

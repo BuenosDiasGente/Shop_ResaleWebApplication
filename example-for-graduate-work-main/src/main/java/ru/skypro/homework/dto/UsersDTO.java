@@ -1,6 +1,8 @@
 package ru.skypro.homework.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.skypro.homework.constants.Role;
 import ru.skypro.homework.model.Image;
 
@@ -8,13 +10,14 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UsersDTO {
-    private Long id;
+    private Integer id;
     private String email;
-    private String name;
-    private String surname;
+    private String firstName;
+    private String LastName;
     private String phone;
-    private String role;
-    // Image image; //Image???
-    private byte[] picture;
+    private Role role;
+    private String image;
 }

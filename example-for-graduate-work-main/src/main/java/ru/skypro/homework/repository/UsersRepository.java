@@ -8,6 +8,6 @@ import ru.skypro.homework.model.Users;
 @Repository
 public interface UsersRepository extends JpaRepository<Users, Long> {
 
-    @Query(value = "SELECT u FROM Users u WHERE u.login = :userName")
+    @Query(value = "SELECT u FROM Users u WHERE u.email = :userName")
     public Users findUserByUserName(String userName);
 }

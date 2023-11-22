@@ -11,11 +11,11 @@ import ru.skypro.homework.model.Users;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface UsersMapper {
 
- @Mapping(target = "email",source = "login") //пишем для несовподающих полей
- @Mapping(target = "picture",ignore = true) //заглушка поля,если не хотим его маппить
- UsersDTO usersEntityToUsersDto(Users users);
-
- UpdateUserDTO userEntityToUpdateUsersDto(Users users);
-// Users registerDtoToUserEntity(RegisterDTO registerDTO);
+// @Mapping(target = "email",source = "login") //пишем для несовподающих полей
+// @Mapping(target = "picture",ignore = true) //заглушка поля,если не хотим его маппить
+// UsersDTO usersEntityToUsersDto(Users users);
+//
+// UpdateUserDTO userEntityToUpdateUsersDto(Users users);
+//// Users registerDtoToUserEntity(RegisterDTO registerDTO);
 
 }
