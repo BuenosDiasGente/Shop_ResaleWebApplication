@@ -1,6 +1,10 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.dto.CommentDTO;
+import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
+import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.service.CommentService;
@@ -8,12 +12,11 @@ import ru.skypro.homework.service.CommentService;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
 
-    public CommentServiceImpl(CommentRepository commentRepository) {
-        this.commentRepository = commentRepository;
-    }
+    private final CommentMapper commentMapper;
 
     @Override
     public List<Comment> getComments(Long adId) {
@@ -21,8 +24,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment addComment(Long adId, Comment comment) {
-        
+    public CommentDTO addComment(Long adId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
         return null;
     }
 
