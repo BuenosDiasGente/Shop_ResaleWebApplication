@@ -1,26 +1,12 @@
 package ru.skypro.homework.service.impl;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.NewPasswordDTO;
-import ru.skypro.homework.dto.UpdateUserDTO;
-import ru.skypro.homework.dto.UsersDTO;
-import ru.skypro.homework.exception.NotFoundConfigException;
-import ru.skypro.homework.mapper.UsersMapper;
-import ru.skypro.homework.model.Users;
-import ru.skypro.homework.repository.UsersRepository;
-import ru.skypro.homework.service.UsersService;
 //
 //@Service
 //@RequiredArgsConstructor
-//public class UsersServiceImpl implements UsersService {
+//public class UsersServiceImpl implements UserService {
 //
-//    private final UsersRepository usersRepository;
-//    private final UsersMapper usersMapper;
+//    private final UserRepository usersRepository;
+//    private final UserMapper usersMapper;
 //
 //    @Override
 //    public boolean updatePassword(NewPasswordDTO password) {
@@ -28,7 +14,7 @@ import ru.skypro.homework.service.UsersService;
 //    }
 //
 //    @Override
-//    public UsersDTO getUser() {
+//    public UserDTO getUser() {
 //        //Если, аутентификация прошла успешно — это значит, имя и пароль верные.
 //        //Тогда объект Authentication сохраняется в SecurityContext, а тот, в свою очередь, — в SecurityContextHolder:
 //        //Authentication-объект, отражающий информацию о текущем пользователе и его привилегиях.
@@ -36,7 +22,7 @@ import ru.skypro.homework.service.UsersService;
 //        //После  успешной аутентификации в поле Principal объекта Authentication будет реальный пользователь в виде UserDetails:
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-//        Users user = usersRepository.findUserByUserName(username);
+//        User user = usersRepository.findUserByUserName(username);
 //        return usersMapper.usersEntityToUsersDto(user);
 //    }
 //
@@ -44,7 +30,7 @@ import ru.skypro.homework.service.UsersService;
 //    public UpdateUserDTO updateUser(UpdateUserDTO updateUserDTO) {
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-//        Users user = usersRepository.findUserByUserName(username);
+//        User user = usersRepository.findUserByUserName(username);
 //        user.setName(updateUserDTO.getName());
 //        user.setSurname(updateUserDTO.getSurname());
 //        user.setPhone(updateUserDTO.getPhone());
@@ -57,9 +43,9 @@ import ru.skypro.homework.service.UsersService;
 //    }
 
 
-//    private Users findUserByLogin(Authentication authentication) {
+//    private User findUserByLogin(Authentication authentication) {
 //        // SecurityContextHolder.getContext().getAuthentication();
-//        Users user = usersRepository.findUserByUserName(authentication.getName());
+//        User user = usersRepository.findUserByUserName(authentication.getName());
 //        if (userLogin.isEmpty()) {
 //            throw new NotFoundConfigException();
 //        } else {

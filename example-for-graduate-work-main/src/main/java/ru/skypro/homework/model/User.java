@@ -3,7 +3,6 @@ package ru.skypro.homework.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import ru.skypro.homework.constants.Role;
 
 import javax.persistence.*;
@@ -13,7 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "user_application")
-public class Users {
+public class User {
     @Id
     @SequenceGenerator(name = "user_applicationSequence", sequenceName = "user_application_sequence", allocationSize = 1,
             initialValue = 1)
@@ -38,7 +37,6 @@ public class Users {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToOne
-    @JoinColumn(name = "image_id")
-    private Image image;
+    @Lob
+    private byte[] picture;
 }

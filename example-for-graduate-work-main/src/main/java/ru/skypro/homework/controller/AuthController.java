@@ -21,9 +21,9 @@ public class AuthController {
     private final AuthService authService;
 
     /**
-     * авторизация пользователя.
+     * Авторизация пользователя
      * @param login
-     * @return status 200 or 401.
+     * @return status 200 or 401
      */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO login) {
@@ -35,9 +35,9 @@ public class AuthController {
     }
 
     /**
-     * регистрация нового пользователя.
+     * Регистрация пользователя
      * @param register
-     * @return
+     * @return status 2001 or 400
      */
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterDTO register) {

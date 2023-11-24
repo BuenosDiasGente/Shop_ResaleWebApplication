@@ -11,7 +11,7 @@ public class AdDTO {
 
     private Long id;
 
-    private Integer userId;//Users??
+    private Integer userId;//User??
 
     private String  adImage;//Image??
 

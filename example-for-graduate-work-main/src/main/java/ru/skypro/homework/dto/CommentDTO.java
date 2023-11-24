@@ -6,11 +6,11 @@ import lombok.Data;
 public class CommentDTO {
     private Long id;
 
-    private Integer userId; //Users??
+    private Integer userId; //User??
 
     private String userImage;// Image??
 
-    private String name; //Users??
+    private String name; //User??
 
     private Long timeOfCreation;
 

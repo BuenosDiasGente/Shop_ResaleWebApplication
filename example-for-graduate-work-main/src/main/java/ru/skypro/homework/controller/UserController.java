@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
-import ru.skypro.homework.dto.UsersDTO;
-import ru.skypro.homework.service.UsersService;
+import ru.skypro.homework.dto.UserDTO;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -27,9 +26,9 @@ import java.io.IOException;
 @RequestMapping("/users")
 @Tag(name = "Пользователи",
         description = "Все методы для работы с пользователями системы")
-public class UsersController {
+public class UserController {
 
-  //  private final UsersService usersService;
+  //  private final UserService userService;
 
     @Operation(
             summary = "Обновление пароля",
@@ -49,7 +48,7 @@ public class UsersController {
             }
     )
     @PostMapping("/set_password")
-    public ResponseEntity<Void> updatePassword(@RequestBody @Valid NewPasswordDTO password) {
+    public ResponseEntity<Void> setPassword(@RequestBody @Valid NewPasswordDTO password) {
         return ResponseEntity.ok().build();
     }
 
@@ -61,7 +60,7 @@ public class UsersController {
                             description = "Информация получена",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = UsersDTO.class)
+                                    schema = @Schema(implementation = UserDTO.class)
                             )
                     ),
                     @ApiResponse(
@@ -72,7 +71,7 @@ public class UsersController {
     )
 
     @GetMapping("/me")
-    public ResponseEntity<UsersDTO> getUser() {
+    public ResponseEntity<UserDTO> getUser() {
         return ResponseEntity.ok().build();
                // ResponseEntity.ok(usersService.getUser());
     }
