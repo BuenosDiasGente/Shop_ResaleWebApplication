@@ -19,22 +19,22 @@ public class CommentServiceImpl implements CommentService {
     private final CommentMapper commentMapper;
 
     @Override
-    public List<Comment> getComments(Long adId) {
+    public List<Comment> getComments(Integer adId) {
         return commentRepository.getCommentsByAdIdIs(adId);
     }
 
     @Override
-    public CommentDTO addComment(Long adId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
+    public CommentDTO addComment(Integer adId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
         return null;
     }
 
     @Override
-    public void deleteComment(Long adId, Long commentId) {
+    public void deleteComment(Integer adId, Integer commentId) {
 
     }
 
     @Override
-    public Comment patchComment(Long adId, Long commentId, String text) {
+    public Comment patchComment(Integer adId, Integer commentId, String text) {
         return null;
     }
 }

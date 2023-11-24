@@ -51,7 +51,7 @@ public class CommentController {
             tags = "Комментарии"
     )
     @GetMapping("/{id}/comments")
-    public ResponseEntity<CommentsDTO> getComments(@Parameter(description = "id объявления") @PathVariable Long id) {
+    public ResponseEntity<CommentsDTO> getComments(@Parameter(description = "id объявления") @PathVariable Integer id) {
         commentService.getComments(id);
         return null;
 
@@ -81,7 +81,7 @@ public class CommentController {
     )
     @PostMapping("/{id}/comments")
     public ResponseEntity<CommentDTO> addComments(@Parameter(description = "id объявления")
-                                                  @PathVariable Long id, @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
+                                                  @PathVariable Integer id, @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
         return ResponseEntity.ok(commentService.addComment(id, createOrUpdateCommentDTO));
 
     }
@@ -114,7 +114,7 @@ public class CommentController {
             tags = "Комментарии"
     )
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public void deleteComment(@Parameter(description = "id объявления и комментария") @PathVariable Long adId, @PathVariable Long commentId) {
+    public void deleteComment(@Parameter(description = "id объявления и комментария") @PathVariable Integer adId, @PathVariable Integer commentId) {
         commentService.deleteComment(adId, commentId);
 
     }
@@ -146,8 +146,8 @@ public class CommentController {
             tags = "Комментарии"
     )
     @PatchMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<Comment> patchComment(@Parameter(description = "id объявления и комментария, + текст комментария")
-                                                @PathVariable Long adId, @PathVariable Long commentId, @RequestBody Comment comment) {
+    public ResponseEntity<CommentDTO> patchComment(@Parameter(description = "id объявления и комментария, + текст комментария")
+                                                @PathVariable Integer adId, @PathVariable Integer commentId, @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
         //ResponseEntity.ok(commentService.patchComment(adId, commentId, comment.getCommentText()));
 
         return null;
