@@ -6,8 +6,12 @@ import org.springframework.stereotype.Repository;
 import ru.skypro.homework.model.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query(value = "SELECT u FROM User u WHERE u.email = :userName")
     public User findUserByUserName(String userName);
+
+
+
+
 }

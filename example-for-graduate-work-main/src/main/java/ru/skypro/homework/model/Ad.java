@@ -17,11 +17,12 @@ public class Ad {
     private Integer pk;
 
     @ManyToOne
-    // @JoinColumn(name = "users_id")
+    @JoinColumn(name = "users_id")
     private User author;
 
-    private byte[] image;
+    private String image;
     private String title;
     private Integer price;
     private String description;
+    private byte[] picture;
 }

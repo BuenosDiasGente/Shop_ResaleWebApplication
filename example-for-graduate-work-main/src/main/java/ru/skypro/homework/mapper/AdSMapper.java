@@ -1,34 +1,39 @@
 package ru.skypro.homework.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
+import org.mapstruct.*;
+import org.mapstruct.control.MappingControl;
 import org.mapstruct.factory.Mappers;
-import ru.skypro.homework.dto.AdDTO;
-import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
-import ru.skypro.homework.dto.ExtendedAdDTO;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.model.User;
+
+import java.util.List;
 //import ru.skypro.homework.model.Image;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface AdSMapper {
 
-   /* UsersMapper INSTANCE = Mappers.getMapper(UsersMapper.class);
+    @Mapping(target = "author", qualifiedByName = "authorToInt")
+    AdDTO entityToAdDTO(Ad ad);
 
-    @Mapping(target = "adImage", source = "ad.adImage")
-    ExtendedAdDTO addEntityToExtendedAdDTO(Ad ad, Users users);*/
-/*
+    @Mapping(target = "author", qualifiedByName = "authorToInt")
+    List<AdDTO> adDTOToList(List<Ad> adList);
 
+    @Mapping(target = "authorFirstName", source = "author.firstName")
+    @Mapping(target = "authorLastName", source = "author.lastName")
+    @Mapping(target = "email", source = "author.email")
+    @Mapping(target = "phone", source = "author.phone")
+    ExtendedAdDTO adToExtended(Ad ad);
 
-    @Mapping(target = "header", source = "adHeader")
-    @Mapping(target = "description", source = "adDescription")
-    Ad addAdFromCreateOrUpdateAdDTO(CreateOrUpdateAdDTO createOrUpdateAdDTO);
+    Ad createOrUpdateAdDTOToEntity(CreateOrUpdateCommentDTO createOrUpdateCommentDTO);
 
-    @Mapping(target = "image", source = "ad.imageId")
-    @Mapping(target = "userId", source = "ad.userId")
-    AdDTO toAdDTO(Ad ad);
-*/
+    @Named("authorToInt")
+    default Integer authorToInt(User user) {
+        return user.getId();
+    }
 
-
-
+   /* @Named("imageToString")
+    default String imageToString(Ad ad){
+        return ad.getImage().toString();
+    }*/
 }
