@@ -1,6 +1,7 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -10,10 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.AdDTO;
-import ru.skypro.homework.dto.AdsDTO;
-import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
-import ru.skypro.homework.dto.ExtendedAdDTO;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.model.Ad;
 
 import javax.validation.Valid;
@@ -27,203 +25,240 @@ import java.util.List;
 @RequestMapping("/ads")
 public class AdController {
 
-      @Operation(summary = "Получение всех объявлений",
-              responses = {
-                      @ApiResponse(
-                              responseCode = "200",
-                              description = "Найдены и представлены все размещенные объявления",
-                              content = @Content(
-                                      mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                      schema = @Schema(implementation = AdsDTO.class)
-                              )
-                      ),
-                      @ApiResponse(
-                              responseCode = "404",
-                              description = "Объявления не найдены",
-
-                              content = @Content(
-                                      mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                      schema = @Schema(implementation = AdsDTO.class)
-                              )
-                      )
-              },
-              tags = "Объявления"
-      )
+    @Operation(summary = "Получение всех объявлений",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "OK",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    array = @ArraySchema(schema = @Schema(implementation = AdsDTO.class)
+                                    )
+                            )
+                    )
+            },
+            tags = "Объявления"
+    )
     @GetMapping
-    public ResponseEntity<List<AdsDTO>> getAllAds() {
-        List<AdsDTO> list = new ArrayList<>();
-        return ResponseEntity.ok(list);
+    public ResponseEntity<AdsDTO> getAllAds() {
+        return ResponseEntity.ok(new AdsDTO());
     }
 
-      @Operation(
-              summary = "Добавление объявления",
-              responses = {
-                      @ApiResponse(
-                              responseCode = "200",
-                              description = "Объявление добавлено",
-                              content = @Content(
-                                      mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                      schema = @Schema(implementation = AdDTO.class)
-                              )
-                      )
-              },
-              tags = "Объявления",
-              requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                      description = "Параметры нового объявления",
-                      content = @Content(
-                              mediaType = MediaType.APPLICATION_JSON_VALUE,
-                              schema = @Schema(implementation = AdDTO.class)
-                      )
-              )
-      )
+    @Operation(
+            summary = "Добавление объявления",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "201",
+                            description = "Created",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    array = @ArraySchema(schema = @Schema(implementation = AdDTO.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized")
+
+
+            },
+            tags = "Объявления"
+    )
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdDTO> addAd(@RequestBody @Valid CreateOrUpdateAdDTO ad, @RequestParam MultipartFile image, Authentication authentication) throws IOException {
         return ResponseEntity.ok(new AdDTO());
     }
 
-     @Operation(summary = "Получение информации об объявлении по id",
-             responses = {
-                     @ApiResponse(
-                             responseCode = "200",
-                             description = "Найдено и представлено размещенное объявление",
-                             content = @Content(
-                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                     schema = @Schema(implementation = ExtendedAdDTO.class)
-                             )
-                     ),
-                     @ApiResponse(
-                             responseCode = "404",
-                             description = "Объявление не найдено",
+    @Operation(summary = "Получение информации об объявлении",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "OK",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ExtendedAdDTO.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not found"
+                    )
 
-                             content = @Content(
-                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                     schema = @Schema(implementation = ExtendedAdDTO.class)
-                             )
-                     )
-             },
-             tags = "Объявления"
-     )
+            },
+            tags = "Объявления"
+    )
     @GetMapping("/{id}")
-    public ResponseEntity<ExtendedAdDTO> getAdById(@PathVariable("id") Long id) {
+    public ResponseEntity<ExtendedAdDTO> getAds(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(new ExtendedAdDTO());
     }
 
-     @Operation(summary = "Удаление объявления по id",
-             responses = {
-                     @ApiResponse(
-                             responseCode = "200",
-                             description = "Объявление удалено",
-                             content = @Content(
-                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                     schema = @Schema(implementation = ExtendedAdDTO.class)
-                             )
-                     ),
-                     @ApiResponse(
-                             responseCode = "401",
-                             description = "Несанкционированное действие"
-                     ),
-                     @ApiResponse(
-                             responseCode = "403",
-                             description = "Ограничение или Отсутствие доступа"
-                     ),
-                     @ApiResponse(
-                             responseCode = "404",
-                             description = "Объявление не найдено"
-                     )
-             },
-             tags = "Объявления"
-     )
+  /*  @Operation(summary = "Получение комментариев объявления",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "OK",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = CommentsDTO.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not found")
+            },
+            tags = "Комментарии"
+    )
+    @GetMapping("/{id}/comments")
+    public ResponseEntity<CommentsDTO> getComments(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(new CommentsDTO());
+    }*/
+
+    @Operation(summary = "Удаление объявления",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "204",
+                            description = "No Content",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ExtendedAdDTO.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized"
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Forbidden"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not found"
+                    )
+            },
+            tags = "Объявления"
+    )
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity deleteAd(@PathVariable("id") Long id) {
+    public ResponseEntity removeAd(@PathVariable("id") Integer id) {
         return ResponseEntity.ok().build();
     }
 
-     @Operation(summary = "Обновление информации об объявлении",
-             responses = {
-                     @ApiResponse(
-                             responseCode = "200",
-                             description = "Объявление найдено и обновлено",
-                             content = @Content(
-                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                     schema = @Schema(implementation = Ad.class)
-                             )
-                     ),
-                     @ApiResponse(
-                             responseCode = "401",
-                             description = "Несанкционированное действие"
-                     ),
-                     @ApiResponse(
-                             responseCode = "403",
-                             description = "Ограничение или Отсутствие доступа"
-                     ),
-                     @ApiResponse(
-                             responseCode = "404",
-                             description = "Объявление не найдено"
-                     )
-             },
-             tags = "Объявления"
-     )
+    @Operation(summary = "Обновление информации об объявлении",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "OK",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = AdDTO.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Forbidden"
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not found"
+                    )
+            },
+            tags = "Объявления"
+    )
     @PatchMapping("/update/{id}")
-    public ResponseEntity<AdDTO> updateAd(@PathVariable("id") Long id, @RequestBody @Valid CreateOrUpdateAdDTO ad, Authentication authentication) {
+    public ResponseEntity<AdDTO> updateAds(@PathVariable("id") Integer id, @RequestBody @Valid CreateOrUpdateAdDTO ad, Authentication authentication) {
         return ResponseEntity.ok(new AdDTO());
     }
 
+    @Operation(summary = "Получение объявлений авторизованного пользователя",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "OK",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = AdsDTO.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized"
+                    )
+            },
+            tags = "Объявления"
 
-     @Operation(summary = "Получение объявлений авторизованного пользователя",
-             responses = {
-                     @ApiResponse(
-                             responseCode = "200",
-                             description = "Найдены и представлены размещенные объявления",
-                             content = @Content(
-                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                     schema = @Schema(implementation = AdsDTO.class)
-                             )
-                     ),
-                     @ApiResponse(
-                             responseCode = "404",
-                             description = "Пользователь не найден",
-
-                             content = @Content(
-                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                     schema = @Schema(implementation = AdsDTO.class)
-                             )
-                     )
-             },
-             tags = "Объявления"
-     )
+    )
     @GetMapping("/me")
-    public ResponseEntity<List<AdsDTO>> getAllAdsByUser(Authentication authentication) {
-        List<AdsDTO> list = new ArrayList<>();
-        return ResponseEntity.ok(list);
+    public ResponseEntity<AdsDTO> getAdsMe(Authentication authentication) {
+        return ResponseEntity.ok(new AdsDTO());
     }
 
-     @Operation(summary = "Обновление картинки объявления",
-             responses = {
-//                     @ApiResponse(
-//                             responseCode = "200",
-//                             description = "Объявление найдено и обновлено",
-//                             content = @Content(
-//                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-//                                     schema = @Schema(implementation=)
-//                             )
-//                     ),
-                     @ApiResponse(
-                             responseCode = "401",
-                             description = "Несанкционированное действие"
-                     ),
-                     @ApiResponse(
-                             responseCode = "403",
-                             description = "Ограничение или Отсутствие доступа"
-                     ),
-                     @ApiResponse(
-                             responseCode = "404",
-                             description = "Объявление не найдено"
-                     )
-             },
-             tags = "Объявления"
-     )
-    @PatchMapping("/update/{id}/image")
-    public ResponseEntity<String> updateImageOfAd(@PathVariable("id") Long id, @NotNull @RequestParam MultipartFile image, Authentication authentication) throws IOException {
+
+    @Operation(summary = "Обновление картинки объявления",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "OK",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    array = @ArraySchema(schema = @Schema(implementation = String.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Forbidden"
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not found"
+                    )
+            },
+            tags = "Объявления"
+    )
+    @PatchMapping("/{id}/image")
+    public ResponseEntity<String> updateImage(@PathVariable("id") Integer id, @NotNull @RequestParam MultipartFile image, Authentication authentication) throws IOException {
         return ResponseEntity.ok(new String());
     }
+
+   /* @Operation(summary = "Удаление комментария",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "OK"
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Forbidden"
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not found"
+                    )
+            },
+            tags = "Комментарии"
+    )
+    @DeleteMapping("/{adId}/comments/{commentId}")
+    public ResponseEntity deleteComment(@PathVariable() Integer adId, @PathVariable("commentId") Integer commentId) {
+        return ResponseEntity.ok().build();
+    }*/
 }
