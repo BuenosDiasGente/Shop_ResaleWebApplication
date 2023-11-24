@@ -1,55 +1,99 @@
 package ru.skypro.homework.service.impl;
 
-//
-//@Service
-//@RequiredArgsConstructor
-//public class UsersServiceImpl implements UserService {
-//
-//    private final UserRepository usersRepository;
-//    private final UserMapper usersMapper;
-//
-//    @Override
-//    public boolean updatePassword(NewPasswordDTO password) {
-//        return false;
-//    }
-//
-//    @Override
-//    public UserDTO getUser() {
-//        //Если, аутентификация прошла успешно — это значит, имя и пароль верные.
-//        //Тогда объект Authentication сохраняется в SecurityContext, а тот, в свою очередь, — в SecurityContextHolder:
-//        //Authentication-объект, отражающий информацию о текущем пользователе и его привилегиях.
-//        //getPrincipal()-метод получения текущего пользователя
-//        //После  успешной аутентификации в поле Principal объекта Authentication будет реальный пользователь в виде UserDetails:
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.NewPasswordDTO;
+import ru.skypro.homework.dto.UpdateUserDTO;
+import ru.skypro.homework.dto.UserDTO;
+import ru.skypro.homework.exception.InvalidPasswordException;
+import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.model.User;
+import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.service.UserService;
+
+import javax.validation.constraints.NotNull;
+
+@Service
+@RequiredArgsConstructor
+public class UserServiceImpl implements UserService {
+
+    private final UserRepository userRepository;
+    private final UserMapper usersMapper;
+    private final PasswordEncoder passwordEncoder;
+
+
+    /**
+     * метод matches проверяет, закодированный пароль, полученный из хранилища,
+     * совпадает с отправленным необработанным паролем после того, как он тоже закодирован.
+     * Возвращает true, если пароли совпадают, false, если они не совпадают.
+     * Сам сохраненный пароль никогда не расшифровывается.
+     * newPasswordDTO.getCurrentPassword() - исходный пароль для кодирования и сопоставления.
+     * passwords- кодированный пароль из хранилища для сравнения.
+     * метод encode - кодирует необработанный пароль
+     *
+     * @param newPasswordDTO
+     * @return tru or false
+     */
+    @Override
+    public boolean setPassword(NewPasswordDTO newPasswordDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+        User user = userRepository.findUserByUserName(username);
+
+        if (!passwordEncoder.matches(newPasswordDTO.getCurrentPassword(), user.getPassword())) {
+            throw new InvalidPasswordException("Доделать");
+        }
+
+        String encode = passwordEncoder.encode(newPasswordDTO.getNewPassword());
+        user.setPassword(encode);
+        userRepository.save(user);
+        return true;
+    }
+
+
+    @Override
+    public UserDTO getUser() {
+        //Если, аутентификация прошла успешно — это значит, имя и пароль верные.
+        //Тогда объект Authentication сохраняется в SecurityContext, а тот, в свою очередь, — в SecurityContextHolder:
+        //Authentication-объект, отражающий информацию о текущем пользователе и его привилегиях.
+        //getPrincipal()-метод получения текущего пользователя
+        //После  успешной аутентификации в поле Principal объекта Authentication будет реальный пользователь в виде UserDetails:
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+        User user = userRepository.findUserByUserName(username);
+        UserDTO userDTO = usersMapper.usersEntityToUsersDto(user);
+        return userDTO;
+    }
+
+    @Override
+    public UpdateUserDTO updateUser(UpdateUserDTO updateUserDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+        User user = userRepository.findUserByUserName(username);
+        User userEntity = usersMapper.updateUserDtoToUserEntity(updateUserDTO);
+        userRepository.save(userEntity);
+        return usersMapper.userEntityToUpdateUsersDto(userEntity);
+    }
+
+    @Override
+    public boolean updateUserImage(MultipartFile image) {
+        return false;
+    }
+
+
+//    @NotNull
+//    private String objectAuthentication(Authentication authentication){
+//        Authentication authentications = SecurityContextHolder.getContext().getAuthentication();
 //        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-//        User user = usersRepository.findUserByUserName(username);
-//        return usersMapper.usersEntityToUsersDto(user);
-//    }
-//
-//    @Override
-//    public UpdateUserDTO updateUser(UpdateUserDTO updateUserDTO) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-//        User user = usersRepository.findUserByUserName(username);
-//        user.setName(updateUserDTO.getName());
-//        user.setSurname(updateUserDTO.getSurname());
-//        user.setPhone(updateUserDTO.getPhone());
-//        usersRepository.save(user);
-//        return usersMapper.userEntityToUpdateUsersDto(user);
+//        return username;
 //    }
 
-//    @Override
-//    public void updateUserImage(MultipartFile image){
-//    }
-
-
-//    private User findUserByLogin(Authentication authentication) {
-//        // SecurityContextHolder.getContext().getAuthentication();
-//        User user = usersRepository.findUserByUserName(authentication.getName());
-//        if (userLogin.isEmpty()) {
-//            throw new NotFoundConfigException();
-//        } else {
-//          return userLogin.get();
-//        }
-//    }
-//}
+}

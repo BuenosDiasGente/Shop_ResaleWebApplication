@@ -17,6 +17,7 @@ import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 
 @Slf4j
@@ -114,7 +115,7 @@ public class UserController {
             }
     )
     @PatchMapping(value = "/me/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Void> updateUserImage(@RequestBody MultipartFile image) throws IOException {
+    public ResponseEntity<Void> updateUserImage(@RequestBody @NotNull MultipartFile image) throws IOException {
         return ResponseEntity.ok().build();
     }
 }
