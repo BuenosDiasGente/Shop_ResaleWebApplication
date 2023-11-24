@@ -1,16 +1,21 @@
 package ru.skypro.homework.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ExtendedAdDTO {
-    Long adId;
-    private String userName;
-    private String userSurname;
-    private String userLogin;
-    private String userPhone;
-    private String adDescription;
-    private String adImage; //Image??
+    private Integer pk;
+    private String authorFirstName;
+    private String authorLastName;
+    private String description;
+    private String email;
+    private String image;
+    private String phone;
     private Integer price;
-    private String adHeader;
+    private String title;
+
 }

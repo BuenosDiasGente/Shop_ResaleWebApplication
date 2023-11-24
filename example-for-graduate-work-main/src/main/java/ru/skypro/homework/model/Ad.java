@@ -12,14 +12,16 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Ad {
     @Id
-    private Long id;//Integer pk
+    @Column(name = "ad_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer pk;
 
     @ManyToOne
     // @JoinColumn(name = "users_id")
-   private User userId;//author
+    private User author;
 
-
-    private String header;//title
+    private byte[] image;
+    private String title;
     private Integer price;
     private String description;
 }
