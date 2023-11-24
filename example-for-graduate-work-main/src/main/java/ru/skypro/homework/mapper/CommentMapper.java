@@ -23,5 +23,4 @@ public interface CommentMapper {
     })
     CommentDTO entityToDTO(Comment comment, User user); //добавление комментария
     List<CommentDTO> listEntityToCommentsDto(List<Comment> comments);
-
 }

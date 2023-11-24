@@ -5,13 +5,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.skypro.homework.model.Ad;
 
+import java.util.List;
+
 @Repository
-public interface AdRepository extends JpaRepository<Ad, Long> {
-
-/*
-    @Query(value = "SELECT u FROM Ad u WHERE u.adId = :id")
-    Ad findAdById(Long id);
-*/
-
-
+public interface AdRepository extends JpaRepository<Ad, Integer> {
+    @Query(value = "SELECT u FROM Ad u WHERE u.pk = :id")
+    Ad findAdById(Integer id);
 }
