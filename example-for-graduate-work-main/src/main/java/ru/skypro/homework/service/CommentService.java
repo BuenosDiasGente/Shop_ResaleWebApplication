@@ -8,13 +8,12 @@ import java.util.List;
 
 public interface CommentService {
 
-    List<Comment> getComments(Long adId);
+    List<Comment> getComments(Integer adId);
 
-    CommentDTO addComment(Long adId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO); //здесь я не уверен какой id брать, вроде нужен объявления
+    CommentDTO addComment(Integer adId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO); //здесь я не уверен какой id брать, вроде нужен объявления
 
-    void deleteComment(Long adId, Long commentId);
+    void deleteComment(Integer adId, Integer commentId);
 
-    Comment patchComment(Long adId, Long commentId, String text);
-
+    Comment patchComment(Integer adId, Integer commentId, String text);
 
 }

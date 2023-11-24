@@ -7,12 +7,12 @@ import ru.skypro.homework.model.Comment;
 
 import java.util.List;
 
-public interface CommentRepository extends JpaRepository<Comment, Long> {
+public interface CommentRepository extends JpaRepository<Comment, Integer> {
     /**
      * Получаем список комментариев из таблицы "comment" по id объявления (внешний ключ)
      */
     @Query(value = "SELECT * FROM comment WHERE ad_id_id = :adId", nativeQuery = true)
-    List<Comment> getCommentsByAdIdIs(@Param("adId") Long adId);
+    List<Comment> getCommentsByAdIdIs(@Param("adId") Integer adId);
 
 
 
