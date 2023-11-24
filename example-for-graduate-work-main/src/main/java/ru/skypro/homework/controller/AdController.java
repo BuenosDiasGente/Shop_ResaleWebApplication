@@ -15,7 +15,6 @@ import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ExtendedAdDTO;
 import ru.skypro.homework.model.Ad;
-import ru.skypro.homework.model.Image;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -200,14 +199,14 @@ public class AdController {
 
      @Operation(summary = "Обновление картинки объявления",
              responses = {
-                     @ApiResponse(
-                             responseCode = "200",
-                             description = "Объявление найдено и обновлено",
-                             content = @Content(
-                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                     schema = @Schema(implementation = Image.class)
-                             )
-                     ),
+//                     @ApiResponse(
+//                             responseCode = "200",
+//                             description = "Объявление найдено и обновлено",
+//                             content = @Content(
+//                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
+//                                     schema = @Schema(implementation=)
+//                             )
+//                     ),
                      @ApiResponse(
                              responseCode = "401",
                              description = "Несанкционированное действие"

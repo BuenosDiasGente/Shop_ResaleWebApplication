@@ -45,7 +45,6 @@ public class AuthServiceImpl implements AuthService {
 
     /**
      * регистрация пользователя
-     *
      * @param register
      * @return
      */

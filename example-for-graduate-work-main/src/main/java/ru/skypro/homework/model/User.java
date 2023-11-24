@@ -11,12 +11,12 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "user_application")
+@Table(name = "users")
 public class User {
     @Id
-    @SequenceGenerator(name = "user_applicationSequence", sequenceName = "user_application_sequence", allocationSize = 1,
+    @SequenceGenerator(name = "usersSequence", sequenceName = "users_sequence", allocationSize = 1,
             initialValue = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_applicationSequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usersSequence")
     private Integer id;
 
     @Column(name = "login", unique = true)
@@ -38,5 +38,6 @@ public class User {
     private Role role;
 
     @Lob
-    private byte[] picture;
+    private byte[] avatar;
+    private String image;
 }
