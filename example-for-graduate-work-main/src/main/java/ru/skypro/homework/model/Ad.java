@@ -18,9 +18,6 @@ public class Ad {
     // @JoinColumn(name = "users_id")
    private User userId;//author
 
-    @OneToOne
- //   @JoinColumn(name="image_id")
-    private Image adImage;//image
 
     private String header;//title
     private Integer price;
