@@ -22,7 +22,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "users_id")
-    private Users author; //внешний ключ id пользователя, который размести комментарий и стал автором
+    private User author; //внешний ключ id пользователя, который размести комментарий и стал автором
 
     /*@ManyToOne
     @JoinColumn(name = "ad_id")

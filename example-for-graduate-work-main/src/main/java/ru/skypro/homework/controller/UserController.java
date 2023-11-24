@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
-import ru.skypro.homework.dto.UsersDTO;
-import ru.skypro.homework.service.UsersService;
+import ru.skypro.homework.dto.UserDTO;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -27,9 +26,9 @@ import java.io.IOException;
 @RequestMapping("/users")
 @Tag(name = "Пользователи",
         description = "Все методы для работы с пользователями системы")
-public class UsersController {
+public class UserController {
 
-    private final UsersService usersService;
+  //  private final UserService userService;
 
     @Operation(
             summary = "Обновление пароля",
@@ -49,7 +48,7 @@ public class UsersController {
             }
     )
     @PostMapping("/set_password")
-    public ResponseEntity<?> updatePassword(@RequestBody @Valid NewPasswordDTO password) {
+    public ResponseEntity<Void> setPassword(@RequestBody @Valid NewPasswordDTO password) {
         return ResponseEntity.ok().build();
     }
 
@@ -61,7 +60,7 @@ public class UsersController {
                             description = "Информация получена",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = UsersDTO.class)
+                                    schema = @Schema(implementation = UserDTO.class)
                             )
                     ),
                     @ApiResponse(
@@ -72,8 +71,9 @@ public class UsersController {
     )
 
     @GetMapping("/me")
-    public ResponseEntity<UsersDTO> getUser() {
-        return ResponseEntity.ok(usersService.getUser());
+    public ResponseEntity<UserDTO> getUser() {
+        return ResponseEntity.ok().build();
+               // ResponseEntity.ok(usersService.getUser());
     }
 
     @Operation(
@@ -95,10 +95,10 @@ public class UsersController {
     )
 
     @PatchMapping("/me")
-    public ResponseEntity<UpdateUserDTO> updateUser(@RequestBody @Valid UpdateUserDTO updateUserDTO){
-        return ResponseEntity.ok(usersService.updateUser(updateUserDTO));
+    public ResponseEntity<UpdateUserDTO> updateUser(@RequestBody @Valid UpdateUserDTO updateUserDTO) {
+        return ResponseEntity.ok().build();
+                //ResponseEntity.ok(usersService.updateUser(updateUserDTO));
     }
-
 
     @Operation(
             summary = "Обновить аватар авторизованного пользователя",
@@ -114,7 +114,7 @@ public class UsersController {
             }
     )
     @PatchMapping(value = "/me/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image) throws IOException {
+    public ResponseEntity<Void> updateUserImage(@RequestBody MultipartFile image) throws IOException {
         return ResponseEntity.ok().build();
     }
 }
