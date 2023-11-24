@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
+import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.service.CommentService;
 
@@ -50,8 +51,9 @@ public class CommentController {
             tags = "Комментарии"
     )
     @GetMapping("/{id}/comments")
-    public ResponseEntity<List<Comment>> getComments(@Parameter(description = "id объявления") @PathVariable Long id) {
-        return ResponseEntity.ok(commentService.getComments(id));
+    public ResponseEntity<CommentsDTO> getComments(@Parameter(description = "id объявления") @PathVariable Long id) {
+        commentService.getComments(id);
+        return null;
 
     }
 
@@ -78,9 +80,9 @@ public class CommentController {
             tags = "Комментарии"
     )
     @PostMapping("/{id}/comments")
-    public ResponseEntity<Comment> addComments(@Parameter(description = "id объявления")
-                                               @PathVariable Long id, @RequestBody Comment comment) {
-        return ResponseEntity.ok(commentService.addComment(id, comment));
+    public ResponseEntity<CommentDTO> addComments(@Parameter(description = "id объявления")
+                                                  @PathVariable Long id, @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
+        return ResponseEntity.ok(commentService.addComment(id, createOrUpdateCommentDTO));
 
     }
 
@@ -146,7 +148,9 @@ public class CommentController {
     @PatchMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<Comment> patchComment(@Parameter(description = "id объявления и комментария, + текст комментария")
                                                 @PathVariable Long adId, @PathVariable Long commentId, @RequestBody Comment comment) {
-        return ResponseEntity.ok(commentService.patchComment(adId, commentId, comment.getCommentText()));
+        //ResponseEntity.ok(commentService.patchComment(adId, commentId, comment.getCommentText()));
+
+        return null;
 
     }
 }

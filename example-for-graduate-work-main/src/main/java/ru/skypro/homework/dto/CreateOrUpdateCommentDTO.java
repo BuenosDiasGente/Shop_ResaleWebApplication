@@ -7,5 +7,5 @@ import javax.validation.constraints.Size;
 @Data
 public class CreateOrUpdateCommentDTO {
     @Size(min = 8, max = 64)
-    private String commentText;
+    private String text;
 }

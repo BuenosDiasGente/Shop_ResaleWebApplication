@@ -15,25 +15,16 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor
 public class Comment {
     @Id
-    private Long id;
+    private Integer pk;  //id комментария
+
+    private Integer createdAt; //время создания объвления
+    private String text; //текст объявления
 
     @ManyToOne
-//    @JoinColumn(name = "users_id")
-    private Users userId;
+    @JoinColumn(name = "users_id")
+    private Users author; //внешний ключ id пользователя, который размести комментарий и стал автором
 
-    @ManyToOne
-    //  @JoinColumn(name = "avatar_id")
-    private Image userImage;
-
-    @ManyToOne
-    // @JoinColumn(name = "user_name")
-    private Users name;
-
-    private Long timeOfCreation;
-
-    private String commentText;
-
-    @ManyToOne
-    //@JoinColumn(name = "ad_id")
-    private Ad adId;
+    /*@ManyToOne
+    @JoinColumn(name = "ad_id")
+    private Ad ad; //внешний ключ id объявления, к которому разместили комментарии*/ // видимо это тоже лишнее, мы можем добраться через юзера
 }
