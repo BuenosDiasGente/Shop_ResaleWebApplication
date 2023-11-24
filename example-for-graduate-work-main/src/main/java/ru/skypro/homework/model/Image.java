@@ -7,15 +7,19 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToOne;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Image {
-    @Id
+   @Id
     private Long id;
     @Lob
     private byte[] picture;
+/*
+    @OneToOne(mappedBy = "image")
+    private Ad ad;*/
 
 }

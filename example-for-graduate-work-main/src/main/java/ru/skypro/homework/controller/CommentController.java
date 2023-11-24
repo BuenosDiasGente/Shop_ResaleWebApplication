@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
-import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.service.CommentService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/ads")
@@ -51,8 +48,8 @@ public class CommentController {
             tags = "Комментарии"
     )
     @GetMapping("/{id}/comments")
-    public ResponseEntity<CommentsDTO> getComments(@Parameter(description = "id объявления") @PathVariable Long id) {
-        commentService.getComments(id);
+    public ResponseEntity<CommentsDTO> getComments(@Parameter(description = "id объявления") @PathVariable Integer id) {
+        //ResponseEntity.ok()
         return null;
 
     }
@@ -80,9 +77,11 @@ public class CommentController {
             tags = "Комментарии"
     )
     @PostMapping("/{id}/comments")
-    public ResponseEntity<CommentDTO> addComments(@Parameter(description = "id объявления")
-                                                  @PathVariable Long id, @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
-        return ResponseEntity.ok(commentService.addComment(id, createOrUpdateCommentDTO));
+    public ResponseEntity<CommentDTO> addComment(@Parameter(description = "id объявления")
+                                                 @PathVariable Integer id, @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
+
+        //ResponseEntity.ok(commentService.addComment(id, createOrUpdateCommentDTO));
+        return null;
 
     }
 
@@ -114,8 +113,8 @@ public class CommentController {
             tags = "Комментарии"
     )
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public void deleteComment(@Parameter(description = "id объявления и комментария") @PathVariable Long adId, @PathVariable Long commentId) {
-        commentService.deleteComment(adId, commentId);
+    public void deleteComment(@Parameter(description = "id объявления и комментария") @PathVariable Integer adId, @PathVariable Integer commentId) {
+        //commentService.deleteComment(adId, commentId);
 
     }
 
@@ -146,8 +145,9 @@ public class CommentController {
             tags = "Комментарии"
     )
     @PatchMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<Comment> patchComment(@Parameter(description = "id объявления и комментария, + текст комментария")
-                                                @PathVariable Long adId, @PathVariable Long commentId, @RequestBody Comment comment) {
+    public ResponseEntity<CommentDTO> updateComment(@Parameter(description = "id объявления и комментария, + текст комментария")
+                                                 @PathVariable Integer adId, @PathVariable Integer commentId,
+                                                 @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
         //ResponseEntity.ok(commentService.patchComment(adId, commentId, comment.getCommentText()));
 
         return null;

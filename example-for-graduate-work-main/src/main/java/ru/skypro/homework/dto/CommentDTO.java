@@ -10,7 +10,7 @@ public class CommentDTO {
 
     private String text; //текст комментария
 
-    private int author; //id автора комментария
+    private Integer author; //id автора комментария
 
     private String authorImage; //ссылка на аватар комментария
 

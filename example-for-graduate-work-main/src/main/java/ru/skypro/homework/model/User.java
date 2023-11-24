@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "user_application")
+@Table(name = "users")
 public class User {
     @Id
     @SequenceGenerator(name = "user_applicationSequence", sequenceName = "user_application_sequence", allocationSize = 1,
