@@ -2,6 +2,7 @@ package ru.skypro.homework.service.impl;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
@@ -19,6 +21,8 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
 
 import javax.validation.constraints.NotNull;
+
+import static java.util.Objects.isNull;
 
 @Service
 @RequiredArgsConstructor
@@ -69,6 +73,9 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
         User user = userRepository.findUserByUserName(username);
+        if (isNull(user)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
         UserDTO userDTO = usersMapper.usersEntityToUsersDto(user);
         return userDTO;
     }
@@ -78,6 +85,9 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
         User user = userRepository.findUserByUserName(username);
+        if (isNull(user)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
         User userEntity = usersMapper.updateUserDtoToUserEntity(updateUserDTO);
         userRepository.save(userEntity);
         return usersMapper.userEntityToUpdateUsersDto(userEntity);
