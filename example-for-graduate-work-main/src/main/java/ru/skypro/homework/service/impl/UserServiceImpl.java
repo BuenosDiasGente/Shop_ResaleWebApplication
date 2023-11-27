@@ -18,9 +18,12 @@ import ru.skypro.homework.exception.InvalidPasswordException;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
 import javax.validation.constraints.NotNull;
+
+import java.io.IOException;
 
 import static java.util.Objects.isNull;
 
@@ -31,6 +34,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper usersMapper;
     private final PasswordEncoder passwordEncoder;
+    private final ImageService imageService;
 
 
     /**
@@ -94,8 +98,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean updateUserImage(MultipartFile image) {
-        return false;
+    public boolean updateUserImage(MultipartFile image)throws IOException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+        User user = userRepository.findUserByUserName(username);
+        if (isNull(user)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+        user.setImage(imageService.saveToDb(image));
+        return true;
     }
 
 

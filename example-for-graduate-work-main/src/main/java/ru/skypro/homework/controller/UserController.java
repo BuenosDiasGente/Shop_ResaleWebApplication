@@ -16,9 +16,11 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
+import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
 import javax.validation.Valid;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import static java.util.Objects.isNull;
@@ -33,6 +35,7 @@ import static java.util.Objects.isNull;
 public class UserController {
 
     private final UserService userService;
+    private final ImageService imageService;
 
     @Operation(
             summary = "Обновление пароля",
@@ -130,6 +133,30 @@ public class UserController {
         } else {
             userService.updateUserImage(image);
             return ResponseEntity.ok().build();
+        }
+    }
+
+
+    @Operation(
+            summary = "Получить аватар пользователя",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "OK"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not Found"
+                    )
+            }
+    )
+    @GetMapping("me/image/{id}")
+    public ResponseEntity<byte[]> getImageById(@PathVariable int id) {
+        try{
+            return new ResponseEntity<>(imageService.getById(id),HttpStatus.OK);
+        }
+        catch (RuntimeException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }

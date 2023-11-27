@@ -61,6 +61,7 @@ public class AuthServiceImpl implements AuthService {
                         .username(register.getUsername())
                         .roles(register.getRole().name())
                         .build());
+        //сохранять в базу данных
         return true;
     }
 
