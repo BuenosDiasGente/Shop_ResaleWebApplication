@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.service.impl.AdServiceImpl;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -24,6 +26,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/ads")
 public class AdController {
+
+    private final AdService adService;
 
     @Operation(summary = "Получение всех объявлений",
             responses = {
@@ -41,7 +45,7 @@ public class AdController {
     )
     @GetMapping
     public ResponseEntity<AdsDTO> getAllAds() {
-        return ResponseEntity.ok(new AdsDTO());
+        return ResponseEntity.ok(adService.getAllAds());
     }
 
     @Operation(
@@ -66,7 +70,7 @@ public class AdController {
     )
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdDTO> addAd(@RequestBody @Valid CreateOrUpdateAdDTO ad, @RequestParam MultipartFile image, Authentication authentication) throws IOException {
-        return ResponseEntity.ok(new AdDTO());
+        return ResponseEntity.ok(adService.addAd(ad, image, authentication));
     }
 
     @Operation(summary = "Получение информации об объявлении",
@@ -261,4 +265,10 @@ public class AdController {
     public ResponseEntity deleteComment(@PathVariable() Integer adId, @PathVariable("commentId") Integer commentId) {
         return ResponseEntity.ok().build();
     }*/
+
+
+
+
+
+
 }

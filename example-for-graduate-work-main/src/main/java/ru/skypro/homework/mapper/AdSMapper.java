@@ -8,12 +8,13 @@ import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.User;
 
 import java.util.List;
-//import ru.skypro.homework.model.Image;
+import ru.skypro.homework.model.Image;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface AdSMapper {
 
-    @Mapping(target = "author", qualifiedByName = "authorToInt")
+    @Mapping(target = "author", source = "author", qualifiedByName = "authorToInt")
+    @Mapping(target = "image", source = "image", qualifiedByName = "imageToString")
     AdDTO entityToAdDTO(Ad ad);
 
     @Mapping(target = "author", qualifiedByName = "authorToInt")
@@ -23,17 +24,28 @@ public interface AdSMapper {
     @Mapping(target = "authorLastName", source = "author.lastName")
     @Mapping(target = "email", source = "author.email")
     @Mapping(target = "phone", source = "author.phone")
+    @Mapping(target = "image", source = "image", qualifiedByName = "imageToString")
     ExtendedAdDTO adToExtended(Ad ad);
 
-    Ad createOrUpdateAdDTOToEntity(CreateOrUpdateCommentDTO createOrUpdateCommentDTO);
+    Ad createOrUpdateAdDTOToEntity(CreateOrUpdateAdDTO createOrUpdateAdDTO);
 
     @Named("authorToInt")
     default Integer authorToInt(User user) {
         return user.getId();
     }
 
-   /* @Named("imageToString")
-    default String imageToString(Ad ad){
-        return ad.getImage().toString();
-    }*/
+    @Named("imageToString")
+    default String imageToString(Image image){
+        //****** OR
+        String s = image.getId().toString();
+
+
+        //****** OR
+        byte[] array = image.getImage();
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i < array.length; i++) {
+            str.append(array[i]);
+        }
+        return str.toString();
+    }
 }

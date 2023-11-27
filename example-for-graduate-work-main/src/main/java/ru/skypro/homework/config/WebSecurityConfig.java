@@ -2,6 +2,7 @@ package ru.skypro.homework.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +14,7 @@ import ru.skypro.homework.constants.Role;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+// NEEDED NEW ANNOTATIONS
 @Configuration
 public class WebSecurityConfig {
 
@@ -22,7 +24,8 @@ public class WebSecurityConfig {
             "/v3/api-docs",
             "/webjars/**",
             "/login",
-            "/register"
+            "/register", //NEW m
+            "/users/image/**" //NEW M
     };
 
     @Bean
@@ -47,6 +50,8 @@ public class WebSecurityConfig {
                                 authorization
                                         .mvcMatchers(AUTH_WHITELIST)
                                         .permitAll()
+                                        .mvcMatchers(HttpMethod.GET, "/ads") //NEW M
+                                        .permitAll() //NEW M
                                         .mvcMatchers("/ads/**", "/users/**")
                                         .authenticated())
                 .cors()
