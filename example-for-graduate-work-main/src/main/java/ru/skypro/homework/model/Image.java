@@ -1,13 +1,11 @@
 package ru.skypro.homework.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -15,8 +13,19 @@ import javax.persistence.Id;
 @NoArgsConstructor
 public class Image {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer  id;
+    @SequenceGenerator(name = "imageSequence", sequenceName = "image_sequence", allocationSize = 1,
+            initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "imageSequence")
+    @Column(name = "id")
+    private Integer id;
 
+    @Lob
+    @Column(name = "image")
     private byte[] image;
+
+    @OneToOne(mappedBy = "image")
+    @JsonIgnore
+    private User user;
+
+
 }

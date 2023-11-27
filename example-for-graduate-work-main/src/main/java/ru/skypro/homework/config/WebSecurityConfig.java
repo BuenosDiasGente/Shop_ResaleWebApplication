@@ -38,6 +38,7 @@ public class WebSecurityConfig {
                         .roles(Role.USER.name())
                         .build();
         return new InMemoryUserDetailsManager(user);
+        //переписать
     }
 
     @Bean

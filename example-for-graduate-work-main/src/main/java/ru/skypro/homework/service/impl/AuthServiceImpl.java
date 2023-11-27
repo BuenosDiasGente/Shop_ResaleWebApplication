@@ -45,6 +45,7 @@ public class AuthServiceImpl implements AuthService {
 
     /**
      * регистрация пользователя
+     *
      * @param register
      * @return
      */
@@ -60,8 +61,8 @@ public class AuthServiceImpl implements AuthService {
                         .username(register.getUsername())
                         .roles(register.getRole().name())
                         .build());
+        //сохранять в базу данных
         return true;
-        //сохранение в базу данных
     }
 
 }
