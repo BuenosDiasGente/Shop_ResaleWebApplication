@@ -15,6 +15,7 @@ import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.exception.InvalidPasswordException;
+import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
@@ -53,7 +54,7 @@ public class UserServiceImpl implements UserService {
     public boolean setPassword(NewPasswordDTO newPasswordDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-        User user = userRepository.findUserByUserName(username);
+        User user = userRepository.findUserByUserName(username).orElseThrow(()->new UserNotFoundException("UserNotFound"));
 
         if (!passwordEncoder.matches(newPasswordDTO.getCurrentPassword(), user.getPassword())) {
             throw new InvalidPasswordException("Доделать");
@@ -76,7 +77,7 @@ public class UserServiceImpl implements UserService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-        User user = userRepository.findUserByUserName(username);
+        User user = userRepository.findUserByUserName(username).orElseThrow(()->new UserNotFoundException("UserNotFound"));
         if (isNull(user)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
@@ -88,10 +89,7 @@ public class UserServiceImpl implements UserService {
     public UpdateUserDTO updateUser(UpdateUserDTO updateUserDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-        User user = userRepository.findUserByUserName(username);
-        if (isNull(user)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
+        User user = userRepository.findUserByUserName(username).orElseThrow(()->new UserNotFoundException("UserNotFound"));
         User userEntity = usersMapper.updateUserDtoToUserEntity(updateUserDTO);
         userRepository.save(userEntity);
         return usersMapper.userEntityToUpdateUsersDto(userEntity);
@@ -101,14 +99,10 @@ public class UserServiceImpl implements UserService {
     public boolean updateUserImage(MultipartFile image)throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-        User user = userRepository.findUserByUserName(username);
-        if (isNull(user)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
+        User user = userRepository.findUserByUserName(username).orElseThrow(()->new UserNotFoundException("UserNotFound"));
         user.setImage(imageService.saveToDb(image));
         return true;
     }
-
 
 //    @NotNull
 //    private String objectAuthentication(Authentication authentication){
