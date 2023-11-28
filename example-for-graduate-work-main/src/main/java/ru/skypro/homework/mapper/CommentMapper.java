@@ -13,19 +13,36 @@ import java.util.List;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface CommentMapper {
 
-    Comment createDTOToComment(CreateOrUpdateCommentDTO createOrUpdateCommentDTO);
+    @Named("authorToInt")
+    default Integer authorToInt(User user) {
+        return user.getId();
+    }
 
-//    @Mappings({@Mapping(target = "author", source = "user.id"),
-//            @Mapping(target = "authorImage",sourse="user.image",qualifiedByName = "pathToImageEntity"),
-//           // @Mapping(target = "authorImage", source ="user.image" ),
-//            @Mapping(target="authorFirstName",source = "user.firstName")
-//    })
-//    CommentDTO entityToDTO(Comment comment, User user,Image image); //добавление комментария
-    List<CommentDTO> listEntityToCommentsDto(List<Comment> comments);
+    @Named("imageToString")
+    default String imageToString(Image image){
+        //****** OR
+        String s = image.getId().toString();
 
-//    @Named("pathToImageEntity")
-//    default String pathToImageEntity(Image image){
-//
-//        return image.getUser().getId().toString();
-//    }
+
+        //****** OR
+        byte[] array = image.getImage();
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i < array.length; i++) {
+            str.append(array[i]);
+        }
+        return str.toString();
+    }
+
+    //добавление комментария (DTO)
+    @Mapping(target = "author", source = "user", qualifiedByName = "authorToInt")
+    @Mapping(target = "authorImage", source = "image", qualifiedByName = "imageToString")
+    @Mapping(target = "authorFirstName", source = "user.firstName")
+    CommentDTO entityToDTO(Comment comment, User user, Image image);
+
+    //Получение списка комментариев
+    List<CommentDTO> commentsDTOToList(List<CommentDTO> comments);
+
+    //создание или обновление комментария
+    Comment CreateOrUpdateCommentDTOToEntity(CreateOrUpdateCommentDTO createOrUpdateCommentDTO);
+
 }

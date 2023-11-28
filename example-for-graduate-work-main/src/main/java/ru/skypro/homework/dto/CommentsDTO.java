@@ -8,5 +8,5 @@ import java.util.List;
 @Data
 public class CommentsDTO {
     private Integer count;
-    private List<Comment> results;
+    private List<CommentDTO> results;
 }

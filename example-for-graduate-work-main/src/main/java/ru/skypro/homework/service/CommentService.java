@@ -10,7 +10,7 @@ public interface CommentService {
 
     List<Comment> getComments(Integer adId);
 
-    CommentDTO addComment(Integer adId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO); //здесь я не уверен какой id брать, вроде нужен объявления
+    CommentDTO addComment(Integer adId, Comment comment); //здесь я не уверен какой id брать, вроде нужен объявления
 
     void deleteComment(Integer adId, Integer commentId);
 
