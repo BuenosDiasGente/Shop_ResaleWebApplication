@@ -97,7 +97,7 @@ public class AdController {
     )
     @GetMapping("/{id}")
     public ResponseEntity<ExtendedAdDTO> getAds(@PathVariable("id") Integer id) {
-        return ResponseEntity.ok(new ExtendedAdDTO());
+        return ResponseEntity.ok(adService.getAds(id));
     }
 
   /*  @Operation(summary = "Получение комментариев объявления",
@@ -152,6 +152,7 @@ public class AdController {
     )
     @DeleteMapping("/delete/{id}")
     public ResponseEntity removeAd(@PathVariable("id") Integer id) {
+        adService.removeAd(id);
         return ResponseEntity.ok().build();
     }
 
@@ -182,7 +183,7 @@ public class AdController {
     )
     @PatchMapping("/update/{id}")
     public ResponseEntity<AdDTO> updateAds(@PathVariable("id") Integer id, @RequestBody @Valid CreateOrUpdateAdDTO ad, Authentication authentication) {
-        return ResponseEntity.ok(new AdDTO());
+        return ResponseEntity.ok(adService.updateAds(id,ad,authentication));
     }
 
     @Operation(summary = "Получение объявлений авторизованного пользователя",
@@ -205,7 +206,7 @@ public class AdController {
     )
     @GetMapping("/me")
     public ResponseEntity<AdsDTO> getAdsMe(Authentication authentication) {
-        return ResponseEntity.ok(new AdsDTO());
+        return ResponseEntity.ok(adService.getAdsMe(authentication));
     }
 
 
@@ -237,7 +238,7 @@ public class AdController {
     )
     @PatchMapping("/{id}/image")
     public ResponseEntity<String> updateImage(@PathVariable("id") Integer id, @NotNull @RequestParam MultipartFile image, Authentication authentication) throws IOException {
-        return ResponseEntity.ok(new String());
+        return ResponseEntity.ok(adService.updateImage(id, image, authentication));
     }
 
    /* @Operation(summary = "Удаление комментария",
@@ -265,10 +266,4 @@ public class AdController {
     public ResponseEntity deleteComment(@PathVariable() Integer adId, @PathVariable("commentId") Integer commentId) {
         return ResponseEntity.ok().build();
     }*/
-
-
-
-
-
-
 }
