@@ -14,5 +14,10 @@ public interface ImageRepository extends JpaRepository<Image,Integer> {
      * @return Image
      */
     @Query(value = "SELECT i FROM Image i WHERE i.id = :id")
-    public Image findImageById(Integer id);
+   Image findImageById(Integer id);
+
+
+
+
+
 }
