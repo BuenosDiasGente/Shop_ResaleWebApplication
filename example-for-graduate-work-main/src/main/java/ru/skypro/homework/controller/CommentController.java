@@ -12,20 +12,24 @@ import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
+import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.service.CommentService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/ads")
 public class CommentController {
 
     private final CommentService commentService;
+    private final CommentMapper commentMapper;
 
-    public CommentController(CommentService commentService) {
+       public CommentController(CommentService commentService, CommentMapper commentMapper) {
         this.commentService = commentService;
-    }
+           this.commentMapper = commentMapper;
+       }
 
     @Operation(
             summary = "Получение комментариев объявления",
@@ -52,8 +56,17 @@ public class CommentController {
     )
     @GetMapping("/{id}/comments")
     public ResponseEntity<CommentsDTO> getComments(@Parameter(description = "id объявления") @PathVariable Integer id) {
-        commentService.getComments(id);
-        return null;
+        List<Comment> comments = commentService.getComments(id);
+        CommentDTO commentDTO = new CommentDTO();
+        CommentsDTO commentsDTO =  new CommentsDTO();
+
+        List<CommentDTO> listOfCommentDTO = comments.stream()
+                .map(Comment -> commentDTO)
+                .collect(Collectors.toList());
+
+        commentsDTO.setCount(listOfCommentDTO.size());
+        commentsDTO.setResults(listOfCommentDTO);
+        return ResponseEntity.ok(commentsDTO);
 
     }
 
@@ -82,7 +95,11 @@ public class CommentController {
     @PostMapping("/{id}/comments")
     public ResponseEntity<CommentDTO> addComments(@Parameter(description = "id объявления")
                                                   @PathVariable Integer id, @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
-        return ResponseEntity.ok(commentService.addComment(id, createOrUpdateCommentDTO));
+        Comment comment = commentMapper.CreateOrUpdateCommentDTOToEntity(createOrUpdateCommentDTO);
+        commentService.addComment(id, comment);
+
+
+           return null; //commentMapper.entityToDTO(comment)
 
     }
 

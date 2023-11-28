@@ -16,15 +16,13 @@ import java.util.List;
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
 
-    private final CommentMapper commentMapper;
-
     @Override
     public List<Comment> getComments(Integer adId) {
         return commentRepository.getCommentsByAdIdIs(adId);
     }
 
     @Override
-    public CommentDTO addComment(Integer adId, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
+    public CommentDTO addComment(Integer adId, Comment comment) {
         return null;
     }
 
