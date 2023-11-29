@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -15,7 +12,8 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor
 public class Comment {
     @Id
-    private Integer pk;  //id комментария
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;  //id комментария
 
     private Integer createdAt; //время создания объвления
     private String text; //текст объявления

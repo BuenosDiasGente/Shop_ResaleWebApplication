@@ -19,6 +19,7 @@ import ru.skypro.homework.service.CommentService;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
 public class CommentController {
@@ -99,7 +100,7 @@ public class CommentController {
         commentService.addComment(id, comment);
 
 
-           return null; //commentMapper.entityToDTO(comment)
+           return ResponseEntity.ok(commentMapper.entityToDTO(comment));
 
     }
 
@@ -133,7 +134,6 @@ public class CommentController {
     @DeleteMapping("/{adId}/comments/{commentId}")
     public void deleteComment(@Parameter(description = "id объявления и комментария") @PathVariable Integer adId, @PathVariable Integer commentId) {
         commentService.deleteComment(adId, commentId);
-
     }
 
     @Operation(

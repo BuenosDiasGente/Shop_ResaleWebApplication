@@ -12,8 +12,13 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
     /**
      * Получаем список комментариев из таблицы "comment" по id объявления (внешний ключ)
      */
-    @Query(value = "SELECT * FROM comment WHERE ad_id = :adId", nativeQuery = true)
+    /*@Query(value = "SELECT * FROM comment WHERE ad_id = :adId", nativeQuery = true)
     List<Comment> getCommentsByAdIdIs(@Param("adId") Integer adId);
+*/
+    List<Comment> findCommentsByAd_Pk(Integer adId);
+
+    void deleteCommentByIdAndAd_Pk(Integer adId, Integer commentId);
+
 
     @Query(value = "DELETE FROM comment WHERE ad_id = :adId", nativeQuery = true)
     void deleteCommentsByAdId(Integer adId);

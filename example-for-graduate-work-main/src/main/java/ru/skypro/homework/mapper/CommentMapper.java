@@ -24,25 +24,26 @@ public interface CommentMapper {
         String s = image.getId().toString();
 
 
-        //****** OR
+       /* //****** OR
         byte[] array = image.getImage();
         StringBuilder str = new StringBuilder();
         for (int i = 0; i < array.length; i++) {
             str.append(array[i]);
-        }
-        return str.toString();
+        }*/
+        return null;//str.toString();
     }
 
     //добавление комментария (DTO)
     @Mapping(target = "author", source = "user", qualifiedByName = "authorToInt")
-    @Mapping(target = "authorImage", source = "image", qualifiedByName = "imageToString")
+    @Mapping(target = "authorImage", source = "ad.image", qualifiedByName = "imageToString")
     @Mapping(target = "authorFirstName", source = "user.firstName")
-    CommentDTO entityToDTO(Comment comment, User user, Image image);
+    CommentDTO entityToDTO(Comment comment);
 
     //Получение списка комментариев
     List<CommentDTO> commentsDTOToList(List<CommentDTO> comments);
 
     //создание или обновление комментария
+
     Comment CreateOrUpdateCommentDTOToEntity(CreateOrUpdateCommentDTO createOrUpdateCommentDTO);
 
 }
