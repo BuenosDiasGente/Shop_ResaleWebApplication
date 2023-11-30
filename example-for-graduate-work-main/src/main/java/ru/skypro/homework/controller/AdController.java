@@ -73,8 +73,8 @@ public class AdController {
             },
             tags = "Объявления"
     )
-    @PostMapping( consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AdDTO> addAd(@RequestPart CreateOrUpdateAdDTO properties, @RequestPart MultipartFile image, Authentication authentication) throws IOException {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AdDTO> addAd(@RequestPart @Valid CreateOrUpdateAdDTO properties, @RequestPart MultipartFile image, Authentication authentication) throws IOException {
         return ResponseEntity.ok(adService.addAd(properties, image, authentication));
     }
 
