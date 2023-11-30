@@ -39,19 +39,5 @@ public interface AdSMapper {
 
       return "/ads/image/"+ image.getId();
 
-      /*  //****** OR
-        String s = image.getId().toString();
-
-
-        //****** OR
-        byte[] array = image.getImage();
-        StringBuilder str = new StringBuilder();
-        for (int i = 0; i < array.length; i++) {
-            str.append(array[i]);
-        }
-        return str.toString();
-*/
-
-        //ENDPOINT
     }
 }

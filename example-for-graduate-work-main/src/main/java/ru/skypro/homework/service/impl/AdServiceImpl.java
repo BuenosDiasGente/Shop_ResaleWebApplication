@@ -68,9 +68,7 @@ public class AdServiceImpl implements AdService {
         Ad adN = adSMapper.createOrUpdateAdDTOToEntity(ad);
 
 
-        Image picture = new Image();
-        picture.setImage(image.getBytes());
-        picture = imageRepository.save(picture);
+        Image picture = imageService.saveToDb(image);
 
         adN.setImage(picture);
         adN.setAuthor(user);
@@ -142,7 +140,6 @@ public class AdServiceImpl implements AdService {
         Image newImage = imageService.saveToDb(image);
 
         ad.setImage(newImage);
-
 
 
         // THIS WAY?

@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin(value = "http://localhost:3000")
 @RequiredArgsConstructor
 @RequestMapping("/ads")
 public class AdController {

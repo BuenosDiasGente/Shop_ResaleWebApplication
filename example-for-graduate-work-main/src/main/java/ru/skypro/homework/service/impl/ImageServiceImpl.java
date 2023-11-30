@@ -24,12 +24,14 @@ public class ImageServiceImpl implements ImageService {
         Image image = new Image();
         image.setImage(multipartFile.getBytes());
 
-        log.error("ImageServiceImpl : <- saveToDo");
+        log.info("ImageServiceImpl : <- saveToDo");
         return imageRepository.save(image);
     }
 
     @Override
     public byte[] getById(int id) {
-        return null;
+        return imageRepository.findImageById(id).getImage();
     }
+
+
 }
