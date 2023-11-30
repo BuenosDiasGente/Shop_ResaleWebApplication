@@ -35,6 +35,7 @@ public interface CommentMapper {
 
     //добавление комментария (DTO)
     @Mapping(target = "author", source = "user", qualifiedByName = "authorToInt")
+    @Mapping(target = "pk", source = "comment.id")
     @Mapping(target = "authorImage", source = "ad.image", qualifiedByName = "imageToString")
     @Mapping(target = "authorFirstName", source = "user.firstName")
     CommentDTO entityToDTO(Comment comment);

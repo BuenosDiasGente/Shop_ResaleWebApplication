@@ -27,10 +27,10 @@ public class CommentController {
     private final CommentService commentService;
     private final CommentMapper commentMapper;
 
-       public CommentController(CommentService commentService, CommentMapper commentMapper) {
+    public CommentController(CommentService commentService, CommentMapper commentMapper) {
         this.commentService = commentService;
-           this.commentMapper = commentMapper;
-       }
+        this.commentMapper = commentMapper;
+    }
 
     @Operation(
             summary = "Получение комментариев объявления",
@@ -58,11 +58,14 @@ public class CommentController {
     @GetMapping("/{id}/comments")
     public ResponseEntity<CommentsDTO> getComments(@Parameter(description = "id объявления") @PathVariable Integer id) {
         List<Comment> comments = commentService.getComments(id);
-        CommentDTO commentDTO = new CommentDTO();
-        CommentsDTO commentsDTO =  new CommentsDTO();
+        CommentsDTO commentsDTO = new CommentsDTO();
 
         List<CommentDTO> listOfCommentDTO = comments.stream()
-                .map(Comment -> commentDTO)
+                .map(comment -> {
+                    CommentDTO commentDTO = new CommentDTO();
+                    commentDTO = commentMapper.entityToDTO(comment);
+                    return commentDTO;
+                })
                 .collect(Collectors.toList());
 
         commentsDTO.setCount(listOfCommentDTO.size());
@@ -100,7 +103,7 @@ public class CommentController {
         commentService.addComment(id, comment);
 
 
-           return ResponseEntity.ok(commentMapper.entityToDTO(comment));
+        return ResponseEntity.ok(commentMapper.entityToDTO(comment));
 
     }
 
@@ -164,10 +167,14 @@ public class CommentController {
     )
     @PatchMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<CommentDTO> patchComment(@Parameter(description = "id объявления и комментария, + текст комментария")
-                                                @PathVariable Integer adId, @PathVariable Integer commentId, @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
-        //ResponseEntity.ok(commentService.patchComment(adId, commentId, comment.getCommentText()));
+                                                   @PathVariable Integer adId, @PathVariable Integer commentId,
+                                                   @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
 
-        return null;
+        Comment comment = commentMapper.CreateOrUpdateCommentDTOToEntity(createOrUpdateCommentDTO);
+        commentService.patchComment(adId, commentId, comment.getText());
+        CommentDTO commentDTO = commentMapper.entityToDTO(comment);
+
+        return ResponseEntity.ok(commentDTO);
 
     }
 }
