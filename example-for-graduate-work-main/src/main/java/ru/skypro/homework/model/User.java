@@ -37,6 +37,6 @@ public class User {
     private Role role;
 
     @OneToOne
-    @JoinColumn(name = "image_id")
+    @JoinColumn(name = "image_id", nullable = true)
     private Image image;
 }

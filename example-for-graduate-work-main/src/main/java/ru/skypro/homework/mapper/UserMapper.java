@@ -24,7 +24,10 @@ public interface UserMapper {
 
     @Named("pathToImageEntity")
     default String pathToImageEntity(Image image){
-        return image.getId().toString();
+        if (image == null) {
+            return null;
+        }
+        return "/users/me/image/" + image.getId();
     }
 
 
