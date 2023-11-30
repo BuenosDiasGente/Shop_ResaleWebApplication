@@ -14,12 +14,11 @@ import javax.persistence.*;
 @Table(name = "users")
 public class User {
     @Id
-    @SequenceGenerator(name = "usersSequence", sequenceName = "users_sequence", allocationSize = 1,
-            initialValue = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usersSequence")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+   private boolean enabled;
 
-    @Column(name = "login", unique = true)
+    @Column(name = "username", unique = true)
     private String email;
 
     @Column(name = "password")
