@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,7 +26,8 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 // NEEDED NEW ANNOTATIONS
 @Configuration
-public class WebSecurityConfig {
+@EnableWebSecurity
+public class WebSecurityConfig { //extends WebSecurityConfigurerAdapter
 
     private static final String[] AUTH_WHITELIST = {
             "/swagger-resources/**",
@@ -85,7 +87,8 @@ public class WebSecurityConfig {
                                         .mvcMatchers(HttpMethod.GET, "/ads") //NEW M
                                         .permitAll() //NEW M
                                         .mvcMatchers("/ads/**", "/users/**")
-                                        .authenticated())
+                                        .permitAll())
+                                        // .authenticated())
                 .cors()
                 .and()
                 .httpBasic(withDefaults());
@@ -94,7 +97,7 @@ public class WebSecurityConfig {
 
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder() { // OR PasswordEncoder???
         return new BCryptPasswordEncoder();
     }
 

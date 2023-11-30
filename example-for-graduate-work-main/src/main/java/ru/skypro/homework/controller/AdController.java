@@ -8,17 +8,21 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.impl.AdServiceImpl;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +32,7 @@ import java.util.List;
 public class AdController {
 
     private final AdService adService;
+    private final ImageService imageService;
 
     @Operation(summary = "Получение всех объявлений",
             responses = {
@@ -68,9 +73,9 @@ public class AdController {
             },
             tags = "Объявления"
     )
-    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AdDTO> addAd(@RequestPart @Valid CreateOrUpdateAdDTO ad, @RequestPart MultipartFile image, Authentication authentication) throws IOException {
-        return ResponseEntity.ok(adService.addAd(ad, image, authentication));
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AdDTO> addAd(@RequestPart @Valid CreateOrUpdateAdDTO properties, @RequestPart MultipartFile image, Authentication authentication) throws IOException {
+        return ResponseEntity.ok(adService.addAd(properties, image, authentication));
     }
 
     @Operation(summary = "Получение информации об объявлении",
@@ -237,8 +242,34 @@ public class AdController {
             tags = "Объявления"
     )
     @PatchMapping("/{id}/image")
+    //@PreAuthorize("hasRole()")
     public ResponseEntity<String> updateImage(@PathVariable("id") Integer id, @NotNull @RequestParam MultipartFile image, Authentication authentication) throws IOException {
-        return ResponseEntity.ok(adService.updateImage(id, image, authentication));
+
+
+        HttpURLConnection connection;
+        String rez = adService.updateImage(id, image, authentication);
+        String finalUrl = rez;
+
+        do {
+            connection = (HttpURLConnection) new URL(finalUrl).openConnection();
+            connection.setInstanceFollowRedirects(false);
+            connection.setUseCaches(false);
+            connection.setRequestMethod("GET");
+            connection.connect();
+            int responseCode = connection.getResponseCode();
+            if (responseCode >= 300 && responseCode < 400) {
+                String redirectedUrl = connection.getHeaderField("Location");
+                if (redirectedUrl == null)
+                    break;
+                finalUrl = redirectedUrl;
+            } else
+                break;
+        } while (connection.getResponseCode() != HttpURLConnection.HTTP_OK);
+        connection.disconnect();
+
+
+
+        return ResponseEntity.ok(rez);
     }
 
    /* @Operation(summary = "Удаление комментария",
@@ -266,4 +297,27 @@ public class AdController {
     public ResponseEntity deleteComment(@PathVariable() Integer adId, @PathVariable("commentId") Integer commentId) {
         return ResponseEntity.ok().build();
     }*/
+
+    @Operation(summary = "Получение изображения объявления",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "OK",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = AdsDTO.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized"
+                    )
+            },
+            tags = "Объявления"
+
+    )
+    @GetMapping("/image/{id}")
+    public ResponseEntity<byte[]> getAdsImage(@PathVariable Integer id, Authentication authentication) {
+        return ResponseEntity.ok(imageService.getById(id));
+    }
 }
