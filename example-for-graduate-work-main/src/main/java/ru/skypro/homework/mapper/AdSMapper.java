@@ -36,7 +36,10 @@ public interface AdSMapper {
 
     @Named("imageToString")
     default String imageToString(Image image){
-        //****** OR
+
+      return "/ads/image/"+ image.getId();
+
+      /*  //****** OR
         String s = image.getId().toString();
 
 
@@ -47,5 +50,8 @@ public interface AdSMapper {
             str.append(array[i]);
         }
         return str.toString();
+*/
+
+        //ENDPOINT
     }
 }
