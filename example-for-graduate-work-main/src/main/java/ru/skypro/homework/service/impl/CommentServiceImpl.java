@@ -2,9 +2,6 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.CommentDTO;
-import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
-import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.repository.AdRepository;
@@ -12,6 +9,7 @@ import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.CommentService;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,14 +20,10 @@ public class CommentServiceImpl implements CommentService {
     private final AdRepository adRepository;
     private final UserRepository userRepository;
 
-   /* @Override
-    public List<Comment> getComments(Integer adId) {
-        return commentRepository.getCommentsByAdIdIs(adId);
-    }*/
-
     @Override
     public List<Comment> getComments(Integer adId) {
-        return commentRepository.findCommentsByAd_Pk(adId);
+        List<Comment> commentsByAdPk = commentRepository.findCommentsByAd_Pk(adId);
+        return commentsByAdPk;
     }
 
     @Override
@@ -38,22 +32,33 @@ public class CommentServiceImpl implements CommentService {
         Optional<Ad> adById = adRepository.findAdById(adId);
         if (!adById.isPresent()) {
             return null;
+        } else {
+            comment.setAd(adById.get());
+            comment.setUser(userRepository.findById(adById.get().getAuthor().getId()).get());
+            return commentRepository.save(comment);
         }
-        comment.setAd(adById.get());
-        comment.setUser(userRepository.findById(adById.get().getAuthor().getId()).get());
-        return commentRepository.save(comment);
-
     }
 
     @Override
+    @Transactional
     public void deleteComment(Integer adId, Integer commentId) {
-
-        commentRepository.deleteCommentByIdAndAd_Pk(adId, commentId);
+        commentRepository.deleteCommentByAd_PkAndId(adId, commentId);
 
     }
 
     @Override
     public Comment patchComment(Integer adId, Integer commentId, String text) {
-        return null;
+        Optional<Ad> adById = adRepository.findAdById(adId);
+        Optional<Comment> commentById = commentRepository.findById(commentId);
+
+        if (!adById.isPresent() || !commentById.isPresent()) {
+            return null;
+        } else {
+            commentById.get().setText(text);
+        }
+        Comment comment = commentById.get();
+        commentRepository.save(comment);
+        return comment;
+
     }
 }
