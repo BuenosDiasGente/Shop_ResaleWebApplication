@@ -1,8 +1,6 @@
 package ru.skypro.homework.mapper;
 
 import org.mapstruct.*;
-import org.mapstruct.control.MappingControl;
-import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.User;
@@ -11,7 +9,7 @@ import java.util.List;
 import ru.skypro.homework.model.Image;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
-public interface AdSMapper {
+public interface AdMapper {
 
     @Mapping(target = "author", source = "author", qualifiedByName = "authorToInt")
     @Mapping(target = "image", source = "image", qualifiedByName = "imageToString")
@@ -36,8 +34,6 @@ public interface AdSMapper {
 
     @Named("imageToString")
     default String imageToString(Image image){
-
-      return "/ads/image/"+ image.getId();
-
+      return "/image/"+ image.getId();
     }
 }

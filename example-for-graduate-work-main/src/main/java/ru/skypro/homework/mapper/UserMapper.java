@@ -27,7 +27,7 @@ public interface UserMapper {
         if (image == null) {
             return null;
         }
-        return "/users/me/image/" + image.getId();
+        return "/image/" + image.getId();
     }
 
 

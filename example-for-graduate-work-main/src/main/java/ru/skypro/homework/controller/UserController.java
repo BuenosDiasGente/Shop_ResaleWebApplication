@@ -137,7 +137,7 @@ public class UserController {
     }
 
 
-    @Operation(
+/*    @Operation(
             summary = "Получить аватар пользователя",
             responses = {
                     @ApiResponse(
@@ -158,7 +158,7 @@ public class UserController {
         catch (RuntimeException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-    }
+    }*/
 }
 
 

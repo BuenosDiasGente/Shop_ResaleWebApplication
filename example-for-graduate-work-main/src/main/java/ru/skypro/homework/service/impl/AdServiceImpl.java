@@ -2,12 +2,9 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.dto.AdDTO;
@@ -15,10 +12,8 @@ import ru.skypro.homework.dto.AdsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ExtendedAdDTO;
 import ru.skypro.homework.exception.AdNotFoundException;
-import ru.skypro.homework.exception.UserNotFoundException;
-import ru.skypro.homework.mapper.AdSMapper;
+import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.model.Ad;
-import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
@@ -28,11 +23,8 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.ImageService;
 
-import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
-
-import static jdk.dynalink.linker.support.Guards.isNull;
 
 
 @Service
@@ -40,16 +32,15 @@ import static jdk.dynalink.linker.support.Guards.isNull;
 public class AdServiceImpl implements AdService {
 
     private final AdRepository adRepository;
-    private final AdSMapper adSMapper;
+    private final AdMapper adMapper;
     private final UserRepository usersRepository;
     private final ImageRepository imageRepository;
     private final CommentRepository commentRepository;
-
     private final ImageService imageService;
 
     @Override
     public AdsDTO getAllAds() {
-        List<AdDTO> list = adSMapper.adDTOToList(adRepository.findAll());
+        List<AdDTO> list = adMapper.adDTOToList(adRepository.findAll());
         AdsDTO adsDTO = new AdsDTO();
         adsDTO.setCount(list.size());
         adsDTO.setResults(list);
@@ -64,9 +55,7 @@ public class AdServiceImpl implements AdService {
         User user = usersRepository.findUserByUserName(authentication.getName())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
-
-        Ad adN = adSMapper.createOrUpdateAdDTOToEntity(ad);
-
+        Ad adN = adMapper.createOrUpdateAdDTOToEntity(ad);
 
         Image picture = imageService.saveToDb(image);
 
@@ -75,8 +64,7 @@ public class AdServiceImpl implements AdService {
 
         Ad savedAd = adRepository.save(adN);
 
-
-        AdDTO adDTO = adSMapper.entityToAdDTO(savedAd);
+        AdDTO adDTO = adMapper.entityToAdDTO(savedAd);
 
         return adDTO;
     }
@@ -84,13 +72,11 @@ public class AdServiceImpl implements AdService {
     @Override
     public ExtendedAdDTO getAds(Integer id) {
         Ad ad = adRepository.findAdById(id).orElseThrow(() -> new AdNotFoundException("Ad not found"));
-        return adSMapper.adToExtended(ad);
+        return adMapper.adToExtended(ad);
     }
 
     @Override
     public void removeAd(Integer id) {
-        // CHECK AUTHENTICATION?
-
         Ad ad = adRepository.findAdById(id).orElseThrow(() -> new AdNotFoundException("Ad not found"));
 
         commentRepository.deleteCommentsByAdId(id);
@@ -109,7 +95,7 @@ public class AdServiceImpl implements AdService {
         adN.setPrice(ad.getPrice());
         adN.setDescription(ad.getDescription());
 
-        AdDTO adDTO = adSMapper.entityToAdDTO(adN);
+        AdDTO adDTO = adMapper.entityToAdDTO(adN);
         return adDTO;
     }
 
@@ -122,7 +108,7 @@ public class AdServiceImpl implements AdService {
 
         AdsDTO adsDTO = new AdsDTO();
         adsDTO.setCount(ads.size());
-        adsDTO.setResults(adSMapper.adDTOToList(ads));
+        adsDTO.setResults(adMapper.adDTOToList(ads));
 
         return adsDTO;
     }
@@ -132,7 +118,6 @@ public class AdServiceImpl implements AdService {
         usersRepository.findUserByUserName(authentication.getName())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
-
         Ad ad = adRepository.findAdById(id).orElseThrow(() -> new AdNotFoundException("Ad not found"));
 
         imageRepository.deleteById(ad.getImage().getId());
@@ -141,13 +126,12 @@ public class AdServiceImpl implements AdService {
 
         ad.setImage(newImage);
 
+        return adMapper.imageToString(newImage);
+    }
 
-        // THIS WAY?
-        // image.getBytes().toString();
 
-
-        // ЧТО ДОЛЖЕН СОДЕРЖАТЬ ОТВЕТ В СТРИНГЕ
-        return adSMapper.imageToString(newImage);
+    public Ad findAdById(Integer id){
+        return  adRepository.findAdById(id).orElseThrow(() -> new AdNotFoundException("Ad not found"));
     }
 }
 

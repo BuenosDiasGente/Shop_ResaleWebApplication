@@ -64,7 +64,7 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     @Transactional
-    //@PreAuthorized (“hasRole(‘ADMIN’”)
+    @PreAuthorize("hasRole('ADMIN')")
     public boolean register(RegisterDTO registerDto) {
         log.info("AuthServiceImpl:-> register");
 
