@@ -30,5 +30,4 @@ public interface UserMapper {
         return "/users/me/image/" + image.getId();
     }
 
-
 }
