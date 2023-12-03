@@ -7,5 +7,5 @@ import java.io.IOException;
 
 public interface ImageService {
     Image saveToDb(MultipartFile multipartFile) throws IOException;
-    byte[] getById(int id);
+    byte[] getById(Integer id);
 }

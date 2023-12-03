@@ -11,6 +11,8 @@ import ru.skypro.homework.service.ImageService;
 
 import java.io.IOException;
 
+import static java.util.Objects.isNull;
+
 @Service
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
@@ -29,8 +31,14 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public byte[] getById(int id) {
-        return imageRepository.findImageById(id).getImage();
+    public byte[] getById(Integer id) {
+        log.info("ImageServiceImpl : ->getById");
+        Image imageById = imageRepository.findImageById(id);
+//        if (isNull(imageById)) {
+//            throw new
+//        }
+        log.info("ImageServiceImpl : <- getById");
+        return imageById.getImage();
     }
 
 
