@@ -1,46 +1,93 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.security.core.userdetails.User;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.constants.Role;
+import ru.skypro.homework.dto.RegisterDTO;
+import ru.skypro.homework.exception.InvalidLoginException;
+import ru.skypro.homework.exception.InvalidLoginPasswordException;
+import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.model.User;
+import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.security.MyUserDetailsService;
 import ru.skypro.homework.service.AuthService;
 
-@Service
-public class AuthServiceImpl implements AuthService {
+import javax.transaction.Transactional;
 
-    private final UserDetailsManager manager;
+import static java.util.Objects.isNull;
+
+@Service
+@RequiredArgsConstructor
+public class AuthServiceImpl implements AuthService {
+    private Logger log = LoggerFactory.getLogger(AuthServiceImpl.class);
+
+    /**
+     * Интерфейс предоставляет основную информацию о пользователе.
+     */
+    private final MyUserDetailsService myUserDetailsService;
+    /**
+     * Интерфейс для выполнения односторонего преобразования пароля с целью его безопасного хранения
+     */
     private final PasswordEncoder encoder;
 
-    public AuthServiceImpl(UserDetailsManager manager,
-                           PasswordEncoder passwordEncoder) {
-        this.manager = manager;
-        this.encoder = passwordEncoder;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+
+
+    /**
+     * авторизация пользователя
+     *
+     * @param username
+     * @param password
+     * @return true or false
+     */
+    @Override
+ //   @Transactional
+    public boolean login(String username, String password) {
+        UserDetails details = myUserDetailsService.loadUserByUsername(username);
+        if (!userRepository.findUserByUserName(username).isPresent() || !encoder.matches(password, details.getPassword())) {
+            throw new InvalidLoginPasswordException();
+        }
+
+        return encoder.matches(password, details.getPassword());
     }
 
+    /**
+     * регистрация пользователя
+     * @param registerDto
+     * @return
+     */
     @Override
-    public boolean login(String userName, String password) {
-        if (!manager.userExists(userName)) {
-            return false;
-        }
-        UserDetails userDetails = manager.loadUserByUsername(userName);
-        return encoder.matches(password, userDetails.getPassword());
-    }
+    @Transactional
+    //@PreAuthorized (“hasRole(‘ADMIN’”)
+    public boolean register(RegisterDTO registerDto) {
+        log.info("AuthServiceImpl:-> register");
 
-    @Override
-    public boolean register(Register register) {
-        if (manager.userExists(register.getUsername())) {
-            return false;
+
+        if (userRepository.findUserByUserName(registerDto.getUsername()).isPresent()) {
+            log.error("AuthServiceImpl: register: 'username' InvalidLogin");
+            throw new InvalidLoginException();
         }
-        manager.createUser(
-                User.builder()
-                        .passwordEncoder(this.encoder::encode)
-                        .password(register.getPassword())
-                        .username(register.getUsername())
-                        .roles(register.getRole().name())
-                        .build());
+
+        User userEntity = userMapper.registerDtoToUserEntity(registerDto);
+        String encode = encoder.encode(registerDto.getPassword());
+        userEntity.setPassword(encode);
+
+        if (isNull(registerDto.getRole())) {
+            userEntity.setRole(Role.USER);
+        }
+        userRepository.save(userEntity);
+        if(registerDto.getRole()==Role.ADMIN){ //заменить логи
+            log.info("New ADMIN was created with username - {}", registerDto.getUsername());
+        } else {
+            log.debug("New USER was created with username - {}", registerDto.getUsername());
+
+        }
         return true;
     }
 
