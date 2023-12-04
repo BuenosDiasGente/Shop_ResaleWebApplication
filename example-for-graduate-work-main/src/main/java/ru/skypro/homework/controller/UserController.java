@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDTO;
@@ -84,8 +85,8 @@ public class UserController {
 
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getUser() {
-        userService.getUser();
-        return ResponseEntity.ok().build();
+
+        return ResponseEntity.ok(userService.getUser());
     }
 
 
@@ -109,8 +110,8 @@ public class UserController {
 
     @PatchMapping("/me")
     public ResponseEntity<UpdateUserDTO> updateUser(@RequestBody @Valid UpdateUserDTO updateUserDTO) {
-        userService.updateUser(updateUserDTO);
-        return ResponseEntity.ok().build();
+
+        return ResponseEntity.ok(userService.updateUser(updateUserDTO));
     }
 
     @Operation(
@@ -127,12 +128,12 @@ public class UserController {
             }
     )
     @PatchMapping(value = "/me/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> updateUserImage(@RequestBody MultipartFile image) throws IOException {
+    public ResponseEntity<?> updateUserImage(@RequestBody MultipartFile image, Authentication authentication) throws IOException {
         if (isNull(image)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } else {
-            userService.updateUserImage(image);
-            return ResponseEntity.ok().build();
+
+            return ResponseEntity.ok(userService.updateUserImage(image));
         }
     }
 
@@ -152,10 +153,9 @@ public class UserController {
     )
     @GetMapping("me/image/{id}")
     public ResponseEntity<byte[]> getImageById(@PathVariable int id) {
-        try{
-            return new ResponseEntity<>(imageService.getById(id),HttpStatus.OK);
-        }
-        catch (RuntimeException e){
+        try {
+            return new ResponseEntity<>(imageService.getById(id), HttpStatus.OK);
+        } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
