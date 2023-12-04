@@ -9,6 +9,7 @@ import ru.skypro.homework.model.Image;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.service.ImageService;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 
 import static java.util.Objects.isNull;
@@ -31,6 +32,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
+    @Transactional
     public byte[] getById(Integer id) {
         log.info("ImageServiceImpl : ->getById");
         Image imageById = imageRepository.findImageById(id);

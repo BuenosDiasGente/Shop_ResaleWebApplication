@@ -88,18 +88,21 @@ public class UserServiceImpl implements UserService {
     public UpdateUserDTO updateUser(UpdateUserDTO updateUserDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-        User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
-        User userEntity = usersMapper.updateUserDtoToUserEntity(updateUserDTO);
-        userRepository.save(userEntity);
-        return usersMapper.userEntityToUpdateUsersDto(userEntity);
+        User user = userRepository.findUserByUserName(username).orElseThrow(()->new UserNotFoundException("UserNotFound"));
+        user.setFirstName(updateUserDTO.getFirstName());
+        user.setLastName(updateUserDTO.getLastName());
+        user.setPhone(updateUserDTO.getPhone());
+        userRepository.save(user);
+        return usersMapper.userEntityToUpdateUsersDto(user);
     }
 
     @Override
-    public boolean updateUserImage(MultipartFile image) throws IOException {
+    public boolean updateUserImage(MultipartFile image)throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-        User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
+        User user = userRepository.findUserByUserName(username).orElseThrow(()->new UserNotFoundException("UserNotFound"));
         user.setImage(imageService.saveToDb(image));
+        userRepository.save(user);
         return true;
     }
 

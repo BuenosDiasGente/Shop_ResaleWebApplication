@@ -19,7 +19,7 @@ public class Image {
     @Column(name = "id")
     private Integer id;
 
-  //  @Lob
+    // @Lob
     @Column(name = "image")
     private byte[] image;
 

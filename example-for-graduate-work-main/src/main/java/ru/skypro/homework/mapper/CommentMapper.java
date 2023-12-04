@@ -20,17 +20,7 @@ public interface CommentMapper {
 
     @Named("imageToString")
     default String imageToString(Image image){
-        //****** OR
-        String s = image.getId().toString();
-
-
-       /* //****** OR
-        byte[] array = image.getImage();
-        StringBuilder str = new StringBuilder();
-        for (int i = 0; i < array.length; i++) {
-            str.append(array[i]);
-        }*/
-        return null;//str.toString();
+        return "/ads/image/"+ image.getId();
     }
 
     //добавление комментария (DTO)
