@@ -90,9 +90,11 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
         User user = userRepository.findUserByUserName(username).orElseThrow(()->new UserNotFoundException("UserNotFound"));
-        User userEntity = usersMapper.updateUserDtoToUserEntity(updateUserDTO);
-        userRepository.save(userEntity);
-        return usersMapper.userEntityToUpdateUsersDto(userEntity);
+        user.setFirstName(updateUserDTO.getFirstName());
+        user.setLastName(updateUserDTO.getLastName());
+        user.setPhone(updateUserDTO.getPhone());
+        userRepository.save(user);
+        return usersMapper.userEntityToUpdateUsersDto(user);
     }
 
     @Override
@@ -101,6 +103,7 @@ public class UserServiceImpl implements UserService {
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
         User user = userRepository.findUserByUserName(username).orElseThrow(()->new UserNotFoundException("UserNotFound"));
         user.setImage(imageService.saveToDb(image));
+        userRepository.save(user);
         return true;
     }
 
