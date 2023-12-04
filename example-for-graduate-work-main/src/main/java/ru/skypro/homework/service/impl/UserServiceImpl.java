@@ -7,7 +7,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,8 +20,6 @@ import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
-
-import javax.validation.constraints.NotNull;
 
 import java.io.IOException;
 
@@ -52,9 +49,10 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public boolean setPassword(NewPasswordDTO newPasswordDTO) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-        User user = userRepository.findUserByUserName(username).orElseThrow(()->new UserNotFoundException("UserNotFound"));
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+        String username = objectAuthentication();
+        User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
 
         if (!passwordEncoder.matches(newPasswordDTO.getCurrentPassword(), user.getPassword())) {
             throw new InvalidPasswordException("Доделать");
@@ -75,9 +73,10 @@ public class UserServiceImpl implements UserService {
         //getPrincipal()-метод получения текущего пользователя
         //После  успешной аутентификации в поле Principal объекта Authentication будет реальный пользователь в виде UserDetails:
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-        User user = userRepository.findUserByUserName(username).orElseThrow(()->new UserNotFoundException("UserNotFound"));
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+        String username = objectAuthentication();
+        User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
         if (isNull(user)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
@@ -89,26 +88,26 @@ public class UserServiceImpl implements UserService {
     public UpdateUserDTO updateUser(UpdateUserDTO updateUserDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-        User user = userRepository.findUserByUserName(username).orElseThrow(()->new UserNotFoundException("UserNotFound"));
+        User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
         User userEntity = usersMapper.updateUserDtoToUserEntity(updateUserDTO);
         userRepository.save(userEntity);
         return usersMapper.userEntityToUpdateUsersDto(userEntity);
     }
 
     @Override
-    public boolean updateUserImage(MultipartFile image)throws IOException {
+    public boolean updateUserImage(MultipartFile image) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-        User user = userRepository.findUserByUserName(username).orElseThrow(()->new UserNotFoundException("UserNotFound"));
+        User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
         user.setImage(imageService.saveToDb(image));
         return true;
     }
 
-//    @NotNull
-//    private String objectAuthentication(Authentication authentication){
-//        Authentication authentications = SecurityContextHolder.getContext().getAuthentication();
-//        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-//        return username;
-//    }
+
+    private String objectAuthentication() {
+        Authentication authentications = SecurityContextHolder.getContext().getAuthentication();
+        return ((UserDetails) authentication.getPrincipal()).getUsername();
+
+    }
 
 }

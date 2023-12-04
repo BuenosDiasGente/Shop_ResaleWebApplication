@@ -115,3 +115,37 @@
 2023-12-03 16:51:20.346 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 2023-12-03 16:51:20.381 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 2023-12-03 16:51:20.402 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2023-12-04 20:21:44.462 [main] INFO  r.s.homework.HomeworkApplication - Starting HomeworkApplication using Java 20.0.1 on LAPTOP-T0PI7F2H with PID 11132 (C:\Users\Huawei\IdeaProjects\Shop\example-for-graduate-work-main\target\classes started by Huawei in C:\Users\Huawei\IdeaProjects\Shop)
+2023-12-04 20:21:44.467 [main] INFO  r.s.homework.HomeworkApplication - No active profile set, falling back to 1 default profile: "default"
+2023-12-04 20:21:45.664 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-12-04 20:21:45.768 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 90 ms. Found 4 JPA repository interfaces.
+2023-12-04 20:21:46.486 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2023-12-04 20:21:46.496 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2023-12-04 20:21:46.498 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2023-12-04 20:21:46.499 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.79]
+2023-12-04 20:21:46.620 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2023-12-04 20:21:46.620 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2042 ms
+2023-12-04 20:21:46.820 [main] INFO  o.f.c.i.license.VersionPrinter - Flyway Community Edition 8.5.13 by Redgate
+2023-12-04 20:21:46.821 [main] INFO  o.f.c.i.license.VersionPrinter - See what's new here: https://flywaydb.org/documentation/learnmore/releaseNotes#8.5.13
+2023-12-04 20:21:46.821 [main] INFO  o.f.c.i.license.VersionPrinter - 
+2023-12-04 20:21:47.047 [main] INFO  o.f.c.i.d.base.BaseDatabaseType - Database: jdbc:postgresql://localhost:5432/shop.db (PostgreSQL 13.11)
+2023-12-04 20:21:47.088 [main] INFO  o.f.core.internal.command.DbValidate - Successfully validated 0 migrations (execution time 00:00.018s)
+2023-12-04 20:21:47.089 [main] WARN  o.f.core.internal.command.DbValidate - No migrations found. Are your locations set up correctly?
+2023-12-04 20:21:47.097 [main] INFO  o.f.core.internal.command.DbMigrate - Current version of schema "public": << Empty Schema >>
+2023-12-04 20:21:47.099 [main] INFO  o.f.core.internal.command.DbMigrate - Schema "public" is up to date. No migration necessary.
+2023-12-04 20:21:47.248 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-12-04 20:21:47.332 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.6.15.Final
+2023-12-04 20:21:47.560 [main] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-12-04 20:21:47.715 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2023-12-04 20:21:47.784 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2023-12-04 20:21:47.820 [main] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
+2023-12-04 20:21:48.751 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-12-04 20:21:48.761 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-12-04 20:21:49.620 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-04 20:21:50.217 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5f69462f, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@432b883, org.springframework.security.web.context.SecurityContextPersistenceFilter@eda7dd3, org.springframework.security.web.header.HeaderWriterFilter@3497ecea, org.springframework.web.filter.CorsFilter@f09c282, org.springframework.security.web.authentication.logout.LogoutFilter@5a6d4dee, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@1529d534, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@71c69628, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@613ba54e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@560c3758, org.springframework.security.web.session.SessionManagementFilter@543a7605, org.springframework.security.web.access.ExceptionTranslationFilter@1f7949dc, org.springframework.security.web.access.intercept.AuthorizationFilter@6334c0d8]
+2023-12-04 20:21:50.520 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2023-12-04 20:21:50.542 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2023-12-04 20:21:50.556 [main] INFO  r.s.homework.HomeworkApplication - Started HomeworkApplication in 6.788 seconds (JVM running for 7.907)
+2023-12-04 20:21:56.285 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-12-04 20:21:56.286 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2023-12-04 20:21:56.290 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
