@@ -64,17 +64,11 @@ public class AdServiceImpl implements AdService {
         User user = usersRepository.findUserByUserName(authentication.getName())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
-
         Ad adN = adSMapper.createOrUpdateAdDTOToEntity(ad);
-
-
         Image picture = imageService.saveToDb(image);
-
         adN.setImage(picture);
         adN.setAuthor(user);
-
         Ad savedAd = adRepository.save(adN);
-
 
         AdDTO adDTO = adSMapper.entityToAdDTO(savedAd);
 
@@ -89,7 +83,6 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public void removeAd(Integer id) {
-        // CHECK AUTHENTICATION?
 
         Ad ad = adRepository.findAdById(id).orElseThrow(() -> new AdNotFoundException("Ad not found"));
 
@@ -108,9 +101,9 @@ public class AdServiceImpl implements AdService {
         adN.setTitle(ad.getTitle());
         adN.setPrice(ad.getPrice());
         adN.setDescription(ad.getDescription());
+        adRepository.save(adN);
 
-        AdDTO adDTO = adSMapper.entityToAdDTO(adN);
-        return adDTO;
+        return adSMapper.entityToAdDTO(adN);
     }
 
     @Override
@@ -132,22 +125,14 @@ public class AdServiceImpl implements AdService {
         usersRepository.findUserByUserName(authentication.getName())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
-
         Ad ad = adRepository.findAdById(id).orElseThrow(() -> new AdNotFoundException("Ad not found"));
 
-        imageRepository.deleteById(ad.getImage().getId());
+        Image imageN = imageService.saveToDb(image);
+        ad.setImage(imageN);
 
-        Image newImage = imageService.saveToDb(image);
+        adRepository.save(ad);
 
-        ad.setImage(newImage);
-
-
-        // THIS WAY?
-        // image.getBytes().toString();
-
-
-        // ЧТО ДОЛЖЕН СОДЕРЖАТЬ ОТВЕТ В СТРИНГЕ
-        return adSMapper.imageToString(newImage);
+        return adSMapper.imageToString(imageN);
     }
 }
 
