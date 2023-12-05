@@ -246,7 +246,7 @@ public class AdController {
 
     )
     @GetMapping("/image/{id}")
-    public ResponseEntity<byte[]> getAdsImage(@PathVariable Integer id, Authentication authentication) {
+    public ResponseEntity<byte[]> getAdsImage(@PathVariable Integer id) {
         return ResponseEntity.ok(imageService.getById(id));
     }
 }
