@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper usersMapper;
     private final PasswordEncoder passwordEncoder;
     private final ImageService imageService;
-    private final EntityManager entityManager;
+  //  private final EntityManager entityManager;
 
 
     /**
@@ -55,9 +55,9 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public boolean setPassword(NewPasswordDTO newPasswordDTO) {
-       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-       String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-        //String username = objectAuthentication();
+//       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//       String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+        String username = objectAuthentication();
        // User user = findUserByLoginWithCriteria(username);
        User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
 
@@ -80,9 +80,9 @@ public class UserServiceImpl implements UserService {
         //getPrincipal()-метод получения текущего пользователя
         //После  успешной аутентификации в поле Principal объекта Authentication будет реальный пользователь в виде UserDetails:
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-       String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-      //  String username = objectAuthentication();
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//       String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+        String username = objectAuthentication();
      //   User user = findUserByLoginWithCriteria(username);
        User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
         if (isNull(user)) {
@@ -94,9 +94,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UpdateUserDTO updateUser(UpdateUserDTO updateUserDTO) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-       // String username = objectAuthentication();
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+        String username = objectAuthentication();
       //  User user = findUserByLoginWithCriteria(username);
        User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
         user.setFirstName(updateUserDTO.getFirstName());
@@ -108,9 +108,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean updateUserImage(MultipartFile image) throws IOException {
-     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-      //  String username = objectAuthentication();
+//     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+       String username = objectAuthentication();
      //  User user = findUserByLoginWithCriteria(username);
        User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
         user.setImage(imageService.saveToDb(image));
@@ -119,10 +119,10 @@ public class UserServiceImpl implements UserService {
     }
 
 
-//    private String objectAuthentication() {
-//        Authentication authentications = SecurityContextHolder.getContext().getAuthentication();
-//        return ((UserDetails) authentications.getPrincipal()).getUsername();
-//    }
+    private String objectAuthentication() {
+        Authentication authentications = SecurityContextHolder.getContext().getAuthentication();
+        return ((UserDetails) authentications.getPrincipal()).getUsername();
+    }
 
     /** criteria API
      * @param username

@@ -14,8 +14,8 @@ public class TestController {
 
     private final UserServiceImpl userService;
 
-    @GetMapping("/test")
-    public String test(@RequestParam String username) {
-       return userService.findUserByLoginWithCriteria(username).toString();
-    }
+//    @GetMapping("/test")
+//    public String test(@RequestParam String username) {
+//       return userService.findUserByLoginWithCriteria(username).toString();
+//    }
 }
