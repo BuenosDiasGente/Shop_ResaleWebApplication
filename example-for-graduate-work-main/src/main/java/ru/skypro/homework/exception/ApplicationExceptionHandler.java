@@ -7,10 +7,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ApplicationExceptionHandler {
-    @ExceptionHandler(NotFoundConfigException.class)
-    public ResponseEntity<?> exceptionProcessing(NotFoundConfigException exception){
+//    @ExceptionHandler(NotFoundConfigException.class)
+//    public ResponseEntity<?> exceptionProcessing(NotFoundConfigException exception){
+//    return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getNOT_FOUND_EXCEPTION_DESCRIPTION());
+//    }
 
-        return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getNOT_FOUND_EXCEPTION_DESCRIPTION());
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ResponseEntity<?> exceptionProcessing(InvalidPasswordException exception){
+
+        return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
 }

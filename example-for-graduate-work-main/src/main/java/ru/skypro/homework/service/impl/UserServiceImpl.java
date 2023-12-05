@@ -21,9 +21,14 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.io.IOException;
 
 import static java.util.Objects.isNull;
+import static ru.skypro.homework.exception.ExceptionMessageConst.PASSWORD_NON_VALID;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +38,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper usersMapper;
     private final PasswordEncoder passwordEncoder;
     private final ImageService imageService;
+    private final EntityManager entityManager;
 
 
     /**
@@ -49,13 +55,14 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public boolean setPassword(NewPasswordDTO newPasswordDTO) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-        String username = objectAuthentication();
-        User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
+       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+       String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+        //String username = objectAuthentication();
+       // User user = findUserByLoginWithCriteria(username);
+       User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
 
         if (!passwordEncoder.matches(newPasswordDTO.getCurrentPassword(), user.getPassword())) {
-            throw new InvalidPasswordException("Доделать");
+            throw new InvalidPasswordException(PASSWORD_NON_VALID);
         }
 
         String encode = passwordEncoder.encode(newPasswordDTO.getNewPassword());
@@ -73,10 +80,11 @@ public class UserServiceImpl implements UserService {
         //getPrincipal()-метод получения текущего пользователя
         //После  успешной аутентификации в поле Principal объекта Authentication будет реальный пользователь в виде UserDetails:
 
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-        String username = objectAuthentication();
-        User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+       String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+      //  String username = objectAuthentication();
+     //   User user = findUserByLoginWithCriteria(username);
+       User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
         if (isNull(user)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
@@ -88,7 +96,9 @@ public class UserServiceImpl implements UserService {
     public UpdateUserDTO updateUser(UpdateUserDTO updateUserDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-        User user = userRepository.findUserByUserName(username).orElseThrow(()->new UserNotFoundException("UserNotFound"));
+       // String username = objectAuthentication();
+      //  User user = findUserByLoginWithCriteria(username);
+       User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
         user.setFirstName(updateUserDTO.getFirstName());
         user.setLastName(updateUserDTO.getLastName());
         user.setPhone(updateUserDTO.getPhone());
@@ -97,20 +107,35 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean updateUserImage(MultipartFile image)throws IOException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public boolean updateUserImage(MultipartFile image) throws IOException {
+     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-        User user = userRepository.findUserByUserName(username).orElseThrow(()->new UserNotFoundException("UserNotFound"));
+      //  String username = objectAuthentication();
+     //  User user = findUserByLoginWithCriteria(username);
+       User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
         user.setImage(imageService.saveToDb(image));
         userRepository.save(user);
         return true;
     }
 
 
-    private String objectAuthentication() {
-        Authentication authentications = SecurityContextHolder.getContext().getAuthentication();
-        return ((UserDetails) authentication.getPrincipal()).getUsername();
+//    private String objectAuthentication() {
+//        Authentication authentications = SecurityContextHolder.getContext().getAuthentication();
+//        return ((UserDetails) authentications.getPrincipal()).getUsername();
+//    }
 
-    }
+    /** criteria API
+     * @param username
+     * @return User
+     */
+//    public User findUserByLoginWithCriteria(String username) {
+//        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+//        CriteriaQuery<User> query = criteriaBuilder.createQuery(User.class);
+//        Root<User> root = query.from(User.class);
+//        query.select(root)
+//                .where(
+//                        criteriaBuilder.equal(root.get("email"), username));
+//        return entityManager.createQuery(query).getSingleResult();
+//    }
 
 }
