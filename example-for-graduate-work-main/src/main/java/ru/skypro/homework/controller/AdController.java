@@ -108,11 +108,7 @@ public class AdController {
             responses = {
                     @ApiResponse(
                             responseCode = "204",
-                            description = "No Content",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ExtendedAdDTO.class)
-                            )
+                            description = "No Content"
                     ),
                     @ApiResponse(
                             responseCode = "401",
@@ -163,8 +159,8 @@ public class AdController {
     )
     @PreAuthorize("hasRole('ADMIN') or adServiceImpl.findAdById(id).author.email.equals(authentication.name)")
     @PatchMapping("/{id}")
-    public ResponseEntity<AdDTO> updateAds(@PathVariable("id") Integer id, @RequestBody @Valid CreateOrUpdateAdDTO ad, Authentication authentication) {
-        return ResponseEntity.ok(adService.updateAds(id, ad, authentication));
+    public ResponseEntity<AdDTO> updateAds(@PathVariable("id") Integer id, @RequestBody @Valid CreateOrUpdateAdDTO ad) {
+        return ResponseEntity.ok(adService.updateAds(id, ad));
     }
 
     @Operation(summary = "Получение объявлений авторизованного пользователя",
@@ -190,7 +186,6 @@ public class AdController {
     public ResponseEntity<AdsDTO> getAdsMe(Authentication authentication) {
         return ResponseEntity.ok(adService.getAdsMe(authentication));
     }
-
 
     @Operation(summary = "Обновление картинки объявления",
             responses = {
@@ -220,23 +215,19 @@ public class AdController {
     )
     @PreAuthorize("hasRole('ADMIN') or adServiceImpl.findAdById(id).author.email.equals(authentication.name)")
     @PatchMapping("/{id}/image")
-    public ResponseEntity<String> updateImage(@PathVariable("id") Integer id, @NotNull @RequestParam MultipartFile image, Authentication authentication) throws IOException {
-        return ResponseEntity.ok(adService.updateImage(id, image, authentication));
+    public ResponseEntity<String> updateImage(@PathVariable("id") Integer id, @NotNull @RequestParam MultipartFile image) throws IOException {
+        return ResponseEntity.ok(adService.updateImage(id, image));
     }
 
     @Operation(summary = "Получение изображения объявления",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "OK",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = AdsDTO.class)
-                            )
+                            description = "OK"
                     ),
                     @ApiResponse(
-                            responseCode = "401",
-                            description = "Unauthorized"
+                            responseCode = "404",
+                            description = "Not found"
                     )
             },
             tags = "Объявления"
