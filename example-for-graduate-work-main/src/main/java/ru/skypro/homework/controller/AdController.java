@@ -12,19 +12,16 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.*;
-import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.dto.AdDTO;
+import ru.skypro.homework.dto.AdsDTO;
+import ru.skypro.homework.dto.CreateOrUpdateAdDTO;
+import ru.skypro.homework.dto.ExtendedAdDTO;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.ImageService;
-import ru.skypro.homework.service.impl.AdServiceImpl;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @CrossOrigin(value = "http://localhost:3000")
@@ -133,7 +130,7 @@ public class AdController {
             tags = "Объявления"
     )
     @PreAuthorize("hasRole('ADMIN') or @adServiceImpl.findAdById(id).author.email.equals(authentication.name)")
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity removeAd(@PathVariable("id") Integer id) {
         adService.removeAd(id);
         return ResponseEntity.ok().build();
@@ -165,7 +162,7 @@ public class AdController {
             tags = "Объявления"
     )
     @PreAuthorize("hasRole('ADMIN') or adServiceImpl.findAdById(id).author.email.equals(authentication.name)")
-    @PatchMapping("/update/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<AdDTO> updateAds(@PathVariable("id") Integer id, @RequestBody @Valid CreateOrUpdateAdDTO ad, Authentication authentication) {
         return ResponseEntity.ok(adService.updateAds(id, ad, authentication));
     }
