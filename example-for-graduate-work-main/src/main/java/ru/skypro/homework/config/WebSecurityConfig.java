@@ -39,14 +39,14 @@ public class WebSecurityConfig { //extends WebSecurityConfigurerAdapter
             "/users/image/**" //NEW M
     };
 
-    @Bean
-    public UserDetailsManager userDetailsManager(DataSource dataSource,
-                                                 AuthenticationManager authenticationManager) {
-        JdbcUserDetailsManager jdbcUserDetailsManager =
-                new JdbcUserDetailsManager(dataSource);
-        jdbcUserDetailsManager.setAuthenticationManager(authenticationManager);
-        return jdbcUserDetailsManager;
-    }
+//    @Bean
+//    public UserDetailsManager userDetailsManager(DataSource dataSource,
+//                                                 AuthenticationManager authenticationManager) {
+//        JdbcUserDetailsManager jdbcUserDetailsManager =
+//                new JdbcUserDetailsManager(dataSource);
+//        jdbcUserDetailsManager.setAuthenticationManager(authenticationManager);
+//        return jdbcUserDetailsManager;
+//    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
@@ -63,18 +63,6 @@ public class WebSecurityConfig { //extends WebSecurityConfigurerAdapter
     }
 
 
-//    @Bean
-//    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-//        UserDetails user =
-//                User.builder()
-//                        .username("user@gmail.com")
-//                        .password("password")
-//                        .passwordEncoder(passwordEncoder::encode)
-//                        .roles(Role.USER.name())
-//                        .build();
-//        return new InMemoryUserDetailsManager(user);
-//    }
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf()
@@ -88,7 +76,7 @@ public class WebSecurityConfig { //extends WebSecurityConfigurerAdapter
                                         .permitAll() //NEW M
                                         .mvcMatchers("/ads/**", "/users/**")
                                         .permitAll())
-                                        // .authenticated())
+                // .authenticated())
                 .cors()
                 .and()
                 .httpBasic(withDefaults());
@@ -98,6 +86,7 @@ public class WebSecurityConfig { //extends WebSecurityConfigurerAdapter
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() { // OR PasswordEncoder???
+
         return new BCryptPasswordEncoder();
     }
 

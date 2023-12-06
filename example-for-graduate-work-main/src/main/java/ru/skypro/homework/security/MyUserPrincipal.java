@@ -12,7 +12,7 @@ import java.util.Optional;
 
 
 public class MyUserPrincipal implements UserDetails {
-    User user;
+   private final User user;
 
     public MyUserPrincipal(User user) {
         this.user = user;
@@ -26,12 +26,10 @@ public class MyUserPrincipal implements UserDetails {
                 .map(SimpleGrantedAuthority::new)
                 .map(List::of)
                 .orElse(Collections.emptyList());
-
     }
 
     @Override
     public String getPassword() {
-
         return user.getPassword();
     }
 

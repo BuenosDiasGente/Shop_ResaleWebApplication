@@ -12,7 +12,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     /**
      * получение пользователя по login
-     * @param userName
+     * @param username
      * @return User
      */
 //    @Query(value = "SELECT u FROM User u WHERE u.email = :userName")
