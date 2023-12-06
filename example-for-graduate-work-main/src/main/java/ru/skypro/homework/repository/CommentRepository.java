@@ -6,23 +6,32 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.skypro.homework.model.Comment;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
     /**
      * Получаем список комментариев из таблицы "comment" по id объявления (внешний ключ)
      */
-    /*@Query(value = "SELECT * FROM comment WHERE ad_id = :adId", nativeQuery = true)
-    List<Comment> getCommentsByAdIdIs(@Param("adId") Integer adId);
-*/
     List<Comment> findCommentsByAd_Pk(Integer adId);
 
+    /**
+     * Получаем список комментариев из таблицы "comment" по ad_id объявления (внешний ключ) и id самого коммента
+     */
+    Optional<Comment> findCommentByAd_PkAndId(Integer adId, Integer id);
 
+
+    /**
+     * Удаляем комментарий из таблицы "comment" принадлежащий объявлению(внешний ключ pk) по id комментария
+     */
     void deleteCommentByAd_PkAndId(Integer pk, Integer id);
 
-    /*@Query(value = "DELETE FROM comment WHERE ad_id = :adId AND id =:id", nativeQuery = true)
-    void deleteCommentAdIdAndCommentId(Integer adId, Integer id);*/
 
+    /**
+     * Удаляем все комментарии из таблицы "comment" принадлежащие объявлению(внешний ключ ad_id)
+     */
     @Query(value = "DELETE FROM comment WHERE ad_id = :adId", nativeQuery = true)
     void deleteCommentsByAdId(Integer adId);
 

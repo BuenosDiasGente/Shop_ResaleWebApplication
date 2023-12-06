@@ -20,13 +20,13 @@ public interface CommentMapper {
 
     @Named("imageToString")
     default String imageToString(Image image){
-        return "/ads/image/"+ image.getId();
+        return "/users/me/image/" + image.getId();
     }
 
     //добавление комментария (DTO)
     @Mapping(target = "author", source = "user", qualifiedByName = "authorToInt")
     @Mapping(target = "pk", source = "comment.id")
-    @Mapping(target = "authorImage", source = "ad.image", qualifiedByName = "imageToString")
+    @Mapping(target = "authorImage", source = "user.image", qualifiedByName = "imageToString")
     @Mapping(target = "authorFirstName", source = "user.firstName")
     CommentDTO entityToDTO(Comment comment);
 
