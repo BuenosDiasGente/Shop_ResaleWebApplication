@@ -1,8 +1,10 @@
 package ru.skypro.homework.mapper;
 
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.Named;
 import ru.skypro.homework.dto.CommentDTO;
-import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.model.Image;
@@ -19,7 +21,7 @@ public interface CommentMapper {
     }
 
     @Named("imageToString")
-    default String imageToString(Image image){
+    default String imageToString(Image image) {
         return "/users/me/image/" + image.getId();
     }
 
@@ -28,13 +30,20 @@ public interface CommentMapper {
     @Mapping(target = "pk", source = "comment.id")
     @Mapping(target = "authorImage", source = "user.image", qualifiedByName = "imageToString")
     @Mapping(target = "authorFirstName", source = "user.firstName")
+  //   @Mapping(target = "createdAt", qualifiedByName = "localDateTime")
     CommentDTO entityToDTO(Comment comment);
 
     //Получение списка комментариев
     List<CommentDTO> commentsDTOToList(List<CommentDTO> comments);
 
     //создание или обновление комментария
-
+   // @Mapping(target = "createdAt", qualifiedByName = "localDateTime")
     Comment CreateOrUpdateCommentDTOToEntity(CreateOrUpdateCommentDTO createOrUpdateCommentDTO);
 
-}
+//    @Named("localDateTime")
+//    default Integer localDateTime(String dataTime) {
+//        return Integer.valueOf(parseInt(dataTime, 10));
+//    }
+
+    }
+
