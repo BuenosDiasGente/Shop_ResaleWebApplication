@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
@@ -55,9 +57,10 @@ public class CommentController {
             },
             tags = "Комментарии"
     )
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{id}/comments")
-    public ResponseEntity<CommentsDTO> getComments(@Parameter(description = "id объявления") @PathVariable Integer id) {
-        List<Comment> comments = commentService.getComments(id);
+    public ResponseEntity<CommentsDTO> getComments(@Parameter(description = "id объявления") @PathVariable Integer id, Authentication authentication) {
+        List<Comment> comments = commentService.getComments(id, authentication);
         CommentsDTO commentsDTO = new CommentsDTO();
 
         List<CommentDTO> listOfCommentDTO = comments.stream()
@@ -70,8 +73,12 @@ public class CommentController {
 
         commentsDTO.setCount(listOfCommentDTO.size());
         commentsDTO.setResults(listOfCommentDTO);
-        return ResponseEntity.ok(commentsDTO);
 
+        if (commentsDTO != null) {
+            return ResponseEntity.ok(commentsDTO);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @Operation(
@@ -96,11 +103,12 @@ public class CommentController {
             },
             tags = "Комментарии"
     )
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @PostMapping("/{id}/comments")
     public ResponseEntity<CommentDTO> addComments(@Parameter(description = "id объявления")
-                                                  @PathVariable Integer id, @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
+                                                  @PathVariable Integer id, @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO, Authentication authentication) {
         Comment comment = commentMapper.CreateOrUpdateCommentDTOToEntity(createOrUpdateCommentDTO);
-        commentService.addComment(id, comment);
+        commentService.addComment(id, comment, authentication);
 
 
         return ResponseEntity.ok(commentMapper.entityToDTO(comment));
@@ -134,9 +142,11 @@ public class CommentController {
             },
             tags = "Комментарии"
     )
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public void deleteComment(@Parameter(description = "id объявления и комментария") @PathVariable Integer adId, @PathVariable Integer commentId) {
-        commentService.deleteComment(adId, commentId);
+    public void deleteComment(@Parameter(description = "id объявления и комментария") @PathVariable Integer adId, @PathVariable Integer commentId, Authentication authentication) {
+
+        commentService.deleteComment(adId, commentId, authentication);
     }
 
     @Operation(
@@ -165,16 +175,23 @@ public class CommentController {
             },
             tags = "Комментарии"
     )
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @PatchMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<CommentDTO> patchComment(@Parameter(description = "id объявления и комментария, + текст комментария")
                                                    @PathVariable Integer adId, @PathVariable Integer commentId,
-                                                   @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
+                                                   @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO,
+                                                   Authentication authentication) {
 
         Comment comment = commentMapper.CreateOrUpdateCommentDTOToEntity(createOrUpdateCommentDTO);
-        commentService.patchComment(adId, commentId, comment.getText());
+        commentService.patchComment(adId, commentId, comment.getText(), authentication);
         CommentDTO commentDTO = commentMapper.entityToDTO(comment);
 
-        return ResponseEntity.ok(commentDTO);
+        if (commentDTO != null) {
+            return ResponseEntity.ok(commentDTO);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
 
     }
 }
