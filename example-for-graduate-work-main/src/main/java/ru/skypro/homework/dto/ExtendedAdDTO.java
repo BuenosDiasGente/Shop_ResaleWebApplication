@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ExtendedAdDTO {
+
     private Integer pk;
     private String authorFirstName;
     private String authorLastName;

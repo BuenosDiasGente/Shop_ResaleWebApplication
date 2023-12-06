@@ -25,10 +25,10 @@ public interface AdService {
 
     void removeAd(Integer id);
 
-    AdDTO updateAds(Integer id, CreateOrUpdateAdDTO ad, Authentication authentication);
+    AdDTO updateAds(Integer id, CreateOrUpdateAdDTO ad);
 
     AdsDTO getAdsMe(Authentication authentication);
 
-    String updateImage(Integer id, MultipartFile image, Authentication authentication) throws IOException;
+    String updateImage(Integer id, MultipartFile image) throws IOException;
 
 }
