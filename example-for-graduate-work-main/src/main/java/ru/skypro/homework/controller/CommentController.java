@@ -182,16 +182,16 @@ public class CommentController {
                                                    @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO,
                                                    Authentication authentication) {
 
-        Comment comment = commentMapper.CreateOrUpdateCommentDTOToEntity(createOrUpdateCommentDTO);
-        commentService.patchComment(adId, commentId, comment.getText(), authentication);
-        CommentDTO commentDTO = commentMapper.entityToDTO(comment);
+//        Comment comment = commentMapper.CreateOrUpdateCommentDTOToEntity(createOrUpdateCommentDTO);
+//        commentService.patchComment(adId, commentId, comment, authentication);
+//        CommentDTO commentDTO = commentMapper.entityToDTO(comment);
 
-        if (commentDTO != null) {
-            return ResponseEntity.ok(commentDTO);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-
+//        if (commentDTO != null) {
+//            return ResponseEntity.ok(commentDTO);
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+        return ResponseEntity.ok(commentService.patchComment(adId, commentId, createOrUpdateCommentDTO, authentication));
 
     }
 }

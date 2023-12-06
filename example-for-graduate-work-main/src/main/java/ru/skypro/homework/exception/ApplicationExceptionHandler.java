@@ -13,9 +13,14 @@ public class ApplicationExceptionHandler {
 //    }
 
     @ExceptionHandler(InvalidPasswordException.class)
-    public ResponseEntity<?> exceptionProcessing(InvalidPasswordException exception){
+    public ResponseEntity<?> exceptionProcessing(InvalidPasswordException exception) {
 
-        return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(NotFoundConfigException.class)
+    public ResponseEntity<?> exceptionProcessing(NotFoundConfigException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
 
 }
