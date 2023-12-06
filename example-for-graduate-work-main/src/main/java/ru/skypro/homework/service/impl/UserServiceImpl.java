@@ -2,6 +2,8 @@ package ru.skypro.homework.service.impl;
 
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,7 +16,6 @@ import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.exception.InvalidPasswordException;
-import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
@@ -33,12 +34,13 @@ import static ru.skypro.homework.exception.ExceptionMessageConst.PASSWORD_NON_VA
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+    private Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private final UserRepository userRepository;
     private final UserMapper usersMapper;
     private final PasswordEncoder passwordEncoder;
     private final ImageService imageService;
-  //  private final EntityManager entityManager;
+    private final EntityManager entityManager;
 
 
     /**
@@ -55,16 +57,18 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public boolean setPassword(NewPasswordDTO newPasswordDTO) {
+        log.info("UserServiceImpl : ->setPassword");
+
 //       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //       String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+        //   User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
         String username = objectAuthentication();
-       // User user = findUserByLoginWithCriteria(username);
-       User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
-
+        User user = findUserByLoginWithCriteria(username);
         if (!passwordEncoder.matches(newPasswordDTO.getCurrentPassword(), user.getPassword())) {
+
+
             throw new InvalidPasswordException(PASSWORD_NON_VALID);
         }
-
         String encode = passwordEncoder.encode(newPasswordDTO.getNewPassword());
         user.setPassword(encode);
         userRepository.save(user);
@@ -74,17 +78,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getUser() {
-        //Если, аутентификация прошла успешно — это значит, имя и пароль верные.
-        //Тогда объект Authentication сохраняется в SecurityContext, а тот, в свою очередь, — в SecurityContextHolder:
-        //Authentication-объект, отражающий информацию о текущем пользователе и его привилегиях.
-        //getPrincipal()-метод получения текущего пользователя
-        //После  успешной аутентификации в поле Principal объекта Authentication будет реальный пользователь в виде UserDetails:
 
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //       String username = ((UserDetails) authentication.getPrincipal()).getUsername();
         String username = objectAuthentication();
-     //   User user = findUserByLoginWithCriteria(username);
-       User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
+        User user = findUserByLoginWithCriteria(username);
+        //  User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
         if (isNull(user)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
@@ -97,9 +96,12 @@ public class UserServiceImpl implements UserService {
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
         String username = objectAuthentication();
-      //  User user = findUserByLoginWithCriteria(username);
-       User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
-        user.setFirstName(updateUserDTO.getFirstName());
+        User user = findUserByLoginWithCriteria(username);
+        if (isNull(user)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        } else
+            //  User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
+            user.setFirstName(updateUserDTO.getFirstName());
         user.setLastName(updateUserDTO.getLastName());
         user.setPhone(updateUserDTO.getPhone());
         userRepository.save(user);
@@ -110,32 +112,44 @@ public class UserServiceImpl implements UserService {
     public boolean updateUserImage(MultipartFile image) throws IOException {
 //     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-       String username = objectAuthentication();
-     //  User user = findUserByLoginWithCriteria(username);
-       User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
+        String username = objectAuthentication();
+        User user = findUserByLoginWithCriteria(username);
+        //   User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
         user.setImage(imageService.saveToDb(image));
         userRepository.save(user);
         return true;
     }
 
+    /**
+     * Если, аутентификация прошла успешно — это значит, имя и пароль верные.
+     * Тогда объект Authentication сохраняется в SecurityContext, а тот, в свою очередь, — в SecurityContextHolder:
+     * Authentication-объект, отражающий информацию о текущем пользователе и его привилегиях.
+     * getPrincipal()-метод получения текущего пользователя
+     * После  успешной аутентификации в поле Principal объекта Authentication будет реальный пользователь в виде UserDetails:
+     *
+     * @return UserDetails username
+     */
 
     private String objectAuthentication() {
         Authentication authentications = SecurityContextHolder.getContext().getAuthentication();
         return ((UserDetails) authentications.getPrincipal()).getUsername();
     }
 
-    /** criteria API
+
+    /**
+     * criteria API
+     *
      * @param username
      * @return User
      */
-//    public User findUserByLoginWithCriteria(String username) {
-//        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-//        CriteriaQuery<User> query = criteriaBuilder.createQuery(User.class);
-//        Root<User> root = query.from(User.class);
-//        query.select(root)
-//                .where(
-//                        criteriaBuilder.equal(root.get("email"), username));
-//        return entityManager.createQuery(query).getSingleResult();
-//    }
+    public User findUserByLoginWithCriteria(String username) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> query = criteriaBuilder.createQuery(User.class);
+        Root<User> root = query.from(User.class);
+        query.select(root)
+                .where(
+                        criteriaBuilder.equal(root.get("email"), username));
+        return entityManager.createQuery(query).getSingleResult();
+    }
 
 }
