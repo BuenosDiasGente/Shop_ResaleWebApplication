@@ -22,6 +22,8 @@ public interface CommentMapper {
 
     @Named("imageToString")
     default String imageToString(Image image) {
+        if (image == null) {
+            return null;}
         return "/users/me/image/" + image.getId();
     }
 

@@ -97,10 +97,9 @@ public class AdServiceImpl implements AdService {
     @Override
     public void removeAd(Integer id) {
         Ad ad = adRepository.findAdById(id).orElseThrow(() -> new AdNotFoundException("Ad not found"));
-
         commentRepository.deleteCommentsByAdId(id);
-        adRepository.deleteById(id);
         imageRepository.deleteById(ad.getImage().getId());
+        adRepository.deleteById(id);
     }
 
     /**

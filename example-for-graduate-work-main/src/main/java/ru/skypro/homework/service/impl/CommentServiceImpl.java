@@ -33,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final AdRepository adRepository;
     private final UserRepository userRepository;
-    private  CommentMapper commentMapper;
+    private final CommentMapper commentMapper;
 
     @Override
     public List<Comment> getComments(Integer adId, Authentication authentication) {
@@ -57,7 +57,7 @@ public class CommentServiceImpl implements CommentService {
             return null;
         } else {
             comment.setAd(adById.get());
-         //   comment.setCreatedAt(comment.getCreatedAt());
+            //   comment.setCreatedAt(comment.getCreatedAt());
             comment.setUser(user);
             //comment.setUser(userRepository.findById(adById.get().getAuthor().getId()).get());
             return commentRepository.save(comment);
@@ -81,55 +81,34 @@ public class CommentServiceImpl implements CommentService {
         User user = userRepository.findUserByUserName(authentication.getName())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
         Integer userId = user.getId();
+        Ad ad = adRepository.findAdById(adId).get();
         Comment comment = commentRepository.findAllCommentByAdIdAndAuthorIdAndIdComment(adId, userId, commentId);
         if (isNull(comment)) {
             throw new NotFoundConfigException(NOT_FOUND_EXCEPTION_DESCRIPTION);
         } else {
             comment.setText(createOrUpdateCommentDTO.getText());
-            // long epochMilli = Instant.now().toEpochMilli();
-            //     comment.setCreatedAt(String.valueOf(LocalDateTime.now()));
+            comment.setUser(user);
+            comment.setAd(ad);
+            //comment.setCreatedAt(String.valueOf(LocalDateTime.now()));
 //            String dateTime = parseLocalDateTime();
 //            Integer parseString = parseString(dateTime);
 //            comment.setCreatedAt(parseString);
             commentRepository.save(comment);
-           return commentMapper.entityToDTO(comment);
+            return commentMapper.entityToDTO(comment);
 
         }
     }
-    private String parseLocalDateTime(){
+
+    private String parseLocalDateTime() {
         LocalDateTime currentLocalDateTime = LocalDateTime.now();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return currentLocalDateTime.format(dateTimeFormatter);
     }
-    private Integer parseString(String localDateTime){
-        String parse=new String(localDateTime);
+
+    private Integer parseString(String localDateTime) {
+        String parse = new String(localDateTime);
         return Integer.parseInt(parse);
 
     }
-
-
-        //Optional<Ad> adById = adRepository.findAdById(adId);
-        //Optional<Comment> commentById = commentRepository.findById(commentId);
-
-        /*if (!adById.isPresent() || !commentById.isPresent()) {
-            return null;
-        } else {
-            commentById.get().setText(text);
-        }
-        Comment comment = commentById.get();
-        commentRepository.save(comment);
-        return comment;*/
-
-//        Optional<Comment> commentByAdPkAndId = commentRepository.findCommentByAd_PkAndId(adId, commentId);
-//        if (!commentByAdPkAndId.isPresent()) {
-//            return null;
-//        } else {
-//
-//            commentByAdPkAndId.get().setText(text);
-//        }
-//        Comment comment = commentByAdPkAndId.get();
-//        commentRepository.save(comment);
-//        return comment;
-
 
 }

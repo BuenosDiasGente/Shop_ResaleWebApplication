@@ -4,18 +4,17 @@ package ru.skypro.homework.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.dto.NewPasswordDTO;
 import ru.skypro.homework.dto.UpdateUserDTO;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.exception.InvalidPasswordException;
+import ru.skypro.homework.exception.NotFoundConfigException;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
@@ -30,6 +29,7 @@ import java.io.IOException;
 
 import static java.util.Objects.isNull;
 import static ru.skypro.homework.exception.ExceptionMessageConst.PASSWORD_NON_VALID;
+import static ru.skypro.homework.exception.ExceptionMessageConst.USER_NOT_FOUND_EXCEPTION;
 
 @Service
 @RequiredArgsConstructor
@@ -59,13 +59,12 @@ public class UserServiceImpl implements UserService {
     public boolean setPassword(NewPasswordDTO newPasswordDTO) {
         log.info("UserServiceImpl : ->setPassword");
 
-//       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//       String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-        //   User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
         String username = objectAuthentication();
         User user = findUserByLoginWithCriteria(username);
+        if (isNull(user)) {
+            throw new NotFoundConfigException(USER_NOT_FOUND_EXCEPTION);
+        }
         if (!passwordEncoder.matches(newPasswordDTO.getCurrentPassword(), user.getPassword())) {
-
 
             throw new InvalidPasswordException(PASSWORD_NON_VALID);
         }
@@ -78,14 +77,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getUser() {
-
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//       String username = ((UserDetails) authentication.getPrincipal()).getUsername();
         String username = objectAuthentication();
         User user = findUserByLoginWithCriteria(username);
-        //  User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
         if (isNull(user)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            throw new NotFoundConfigException(USER_NOT_FOUND_EXCEPTION);
         }
         UserDTO userDTO = usersMapper.usersEntityToUsersDto(user);
         return userDTO;
@@ -93,14 +88,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UpdateUserDTO updateUser(UpdateUserDTO updateUserDTO) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
         String username = objectAuthentication();
         User user = findUserByLoginWithCriteria(username);
         if (isNull(user)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            throw new NotFoundConfigException(USER_NOT_FOUND_EXCEPTION);
         } else
-            //  User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
             user.setFirstName(updateUserDTO.getFirstName());
         user.setLastName(updateUserDTO.getLastName());
         user.setPhone(updateUserDTO.getPhone());
@@ -110,12 +102,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean updateUserImage(MultipartFile image) throws IOException {
-//     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
         String username = objectAuthentication();
         User user = findUserByLoginWithCriteria(username);
-        //   User user = userRepository.findUserByUserName(username).orElseThrow(() -> new UserNotFoundException("UserNotFound"));
-        user.setImage(imageService.saveToDb(image));
+        if (isNull(user)) {
+            throw new NotFoundConfigException(USER_NOT_FOUND_EXCEPTION);
+        } else
+            user.setImage(imageService.saveToDb(image));
         userRepository.save(user);
         return true;
     }
