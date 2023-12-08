@@ -26,7 +26,7 @@ public class Comment {
     @JoinColumn(name = "users_id",nullable = false)
     private User user; //внешний ключ id пользователя, который размести комментарий и стал автором
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
    // @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "ad_id",nullable = false)
     private Ad ad; //внешний ключ id объявления, к которому разместили комментарии*/ // видимо это тоже лишнее, мы можем добраться через юзера

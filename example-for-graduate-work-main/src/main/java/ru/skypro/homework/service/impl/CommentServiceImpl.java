@@ -64,7 +64,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    //@Transactional
+    @Transactional
     public void deleteComment(Integer adId, Integer commentId){
         //здесь логика если админ можно удалять все, если юзер только свое
         commentRepository.deleteCommentByAd_PkAndId(adId, commentId);
