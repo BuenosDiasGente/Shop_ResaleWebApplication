@@ -142,11 +142,11 @@ public class CommentController {
             },
             tags = "Комментарии"
     )
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasRole('ADMIN') or @adServiceImpl.findAdById(id).author.email.equals(authentication.name)")
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public void deleteComment(@Parameter(description = "id объявления и комментария") @PathVariable Integer adId, @PathVariable Integer commentId, Authentication authentication) {
+    public void deleteComment(@Parameter(description = "id объявления и комментария") @PathVariable Integer adId, @PathVariable Integer commentId) {
 
-        commentService.deleteComment(adId, commentId, authentication);
+        commentService.deleteComment(adId, commentId);
     }
 
     @Operation(

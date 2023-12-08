@@ -16,8 +16,6 @@ import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
-import ru.skypro.homework.repository.CommentRepository;
-import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.ImageService;
@@ -32,10 +30,8 @@ public class AdServiceImpl implements AdService {
     private final AdRepository adRepository;
     private final AdSMapper adSMapper;
     private final UserRepository usersRepository;
-    private final ImageRepository imageRepository;
-    private final CommentRepository commentRepository;
-
     private final ImageService imageService;
+
 
     /**
      * Метод получения всех объявлений, размещенных на площадке
@@ -95,11 +91,13 @@ public class AdServiceImpl implements AdService {
      * @param id
      */
     @Override
+
     public void removeAd(Integer id) {
-        Ad ad = adRepository.findAdById(id).orElseThrow(() -> new AdNotFoundException("Ad not found"));
-        commentRepository.deleteCommentsByAdId(id);
-        imageRepository.deleteById(ad.getImage().getId());
         adRepository.deleteById(id);
+        //Марин, не стала прописывать проверку и выкидывания ошибки, пропиши,пожалуйста.
+        //За счет настроек в моделях ( @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL))
+        // он удаляет все зависимости по ссылкам на которые ссылается,поэтому не нужно отдельно удалять фото
+        // и комментарии
     }
 
     /**
@@ -156,4 +154,6 @@ public class AdServiceImpl implements AdService {
 
         return adSMapper.imageToString(imageN);
     }
+
+
 }

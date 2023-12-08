@@ -23,9 +23,5 @@ public class Image {
     @Column(name = "image")
     private byte[] image;
 
-/*    @OneToOne(mappedBy = "image")
-    @JsonIgnore
-    private User user;*/
-
 
 }

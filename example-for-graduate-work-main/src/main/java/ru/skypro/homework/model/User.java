@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import ru.skypro.homework.constants.Role;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -35,7 +36,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id", nullable = true)
     private Image image;
+
 }

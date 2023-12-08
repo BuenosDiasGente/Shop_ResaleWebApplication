@@ -17,4 +17,7 @@ public interface ImageRepository extends JpaRepository<Image, Integer> {
     @Query(value = "SELECT i FROM Image i WHERE i.id = :id")
     Image findImageById(Integer id);
 
+    @Query(value ="DELETE FROM Image i WHERE i.id = :id")
+    void deleteImageBy (Integer id);
+
 }

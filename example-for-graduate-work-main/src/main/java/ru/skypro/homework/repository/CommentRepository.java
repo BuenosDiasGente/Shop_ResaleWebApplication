@@ -37,4 +37,6 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
     @Query(value = "DELETE FROM comment WHERE ad_id = :adId", nativeQuery = true)
     void deleteCommentsByAdId(Integer adId);
 
+    @Query(value="DELETE FROM Comment c WHERE c.ad = :adId ")
+    void deleteComment(Integer adId);
 }
