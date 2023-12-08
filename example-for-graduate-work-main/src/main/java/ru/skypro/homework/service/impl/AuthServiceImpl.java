@@ -86,7 +86,7 @@ public class AuthServiceImpl implements AuthService {
         if (registerDto.getRole() == Role.ADMIN) {
             log.info("New ADMIN was created with username - {}", registerDto.getUsername());
         } else {
-            log.error("New USER was created with username - {}", registerDto.getUsername());
+            log.info("New USER was created with username - {}", registerDto.getUsername());
         }
         return true;
     }

@@ -16,6 +16,7 @@ import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.ImageService;
@@ -31,6 +32,7 @@ public class AdServiceImpl implements AdService {
     private final AdSMapper adSMapper;
     private final UserRepository usersRepository;
     private final ImageService imageService;
+    private final ImageRepository imageRepository;
 
 
     /**
@@ -93,11 +95,10 @@ public class AdServiceImpl implements AdService {
     @Override
 
     public void removeAd(Integer id) {
+        if(!adRepository.findAdById(id).isPresent())
+            throw new AdNotFoundException("Ad doesn't exist");
+
         adRepository.deleteById(id);
-        //Марин, не стала прописывать проверку и выкидывания ошибки, пропиши,пожалуйста.
-        //За счет настроек в моделях ( @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL))
-        // он удаляет все зависимости по ссылкам на которые ссылается,поэтому не нужно отдельно удалять фото
-        // и комментарии
     }
 
     /**
@@ -147,6 +148,8 @@ public class AdServiceImpl implements AdService {
     public String updateImage(Integer id, MultipartFile image) throws IOException {
         Ad ad = adRepository.findAdById(id).orElseThrow(() -> new AdNotFoundException("Ad not found"));
 
+        imageRepository.deleteById(ad.getImage().getId());
+
         Image imageN = imageService.saveToDb(image);
         ad.setImage(imageN);
 
@@ -154,6 +157,4 @@ public class AdServiceImpl implements AdService {
 
         return adSMapper.imageToString(imageN);
     }
-
-
 }
