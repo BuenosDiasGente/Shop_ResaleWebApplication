@@ -57,21 +57,17 @@ public class CommentServiceImpl implements CommentService {
             return null;
         } else {
             comment.setAd(adById.get());
-            //   comment.setCreatedAt(comment.getCreatedAt());
+            comment.setCreatedAt(LocalDateTime.now());
             comment.setUser(user);
-            //comment.setUser(userRepository.findById(adById.get().getAuthor().getId()).get());
             return commentRepository.save(comment);
         }
     }
 
     @Override
-    @Transactional
-    public void deleteComment(Integer adId, Integer commentId, Authentication authentication) {
-        User user = userRepository.findUserByUserName(authentication.getName())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+    //@Transactional
+    public void deleteComment(Integer adId, Integer commentId){
         //здесь логика если админ можно удалять все, если юзер только свое
         commentRepository.deleteCommentByAd_PkAndId(adId, commentId);
-
     }
 
     @Override
@@ -87,28 +83,14 @@ public class CommentServiceImpl implements CommentService {
             throw new NotFoundConfigException(NOT_FOUND_EXCEPTION_DESCRIPTION);
         } else {
             comment.setText(createOrUpdateCommentDTO.getText());
-            comment.setUser(user);
-            comment.setAd(ad);
-            //comment.setCreatedAt(String.valueOf(LocalDateTime.now()));
-//            String dateTime = parseLocalDateTime();
-//            Integer parseString = parseString(dateTime);
-//            comment.setCreatedAt(parseString);
+
+            //comment.setUser(user);
+         //   comment.setAd(ad);
             commentRepository.save(comment);
             return commentMapper.entityToDTO(comment);
 
         }
     }
 
-    private String parseLocalDateTime() {
-        LocalDateTime currentLocalDateTime = LocalDateTime.now();
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        return currentLocalDateTime.format(dateTimeFormatter);
-    }
-
-    private Integer parseString(String localDateTime) {
-        String parse = new String(localDateTime);
-        return Integer.parseInt(parse);
-
-    }
 
 }

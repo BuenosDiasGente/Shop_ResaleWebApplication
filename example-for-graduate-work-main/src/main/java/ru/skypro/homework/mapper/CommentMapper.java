@@ -43,7 +43,7 @@ public interface CommentMapper {
     Comment CreateOrUpdateCommentDTOToEntity(CreateOrUpdateCommentDTO createOrUpdateCommentDTO);
 
 //    @Named("localDateTime")
-//    default Integer localDateTime(String dataTime) {
+//    default St localDateTime(String dataTime) {
 //        return Integer.valueOf(parseInt(dataTime, 10));
 //    }
 
