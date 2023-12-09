@@ -18,6 +18,7 @@ import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.service.CommentService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,14 +63,20 @@ public class CommentController {
     public ResponseEntity<CommentsDTO> getComments(@Parameter(description = "id объявления") @PathVariable Integer id, Authentication authentication) {
         List<Comment> comments = commentService.getComments(id, authentication);
         CommentsDTO commentsDTO = new CommentsDTO();
+        List<CommentDTO> listOfCommentDTO = new ArrayList<>();
 
-        List<CommentDTO> listOfCommentDTO = comments.stream()
+        for (Comment comment:comments) {
+            CommentDTO commentDTO = new CommentDTO();
+            commentDTO = commentMapper.entityToDTO(comment);
+            listOfCommentDTO.add(commentDTO);
+        }
+       /* List<CommentDTO> listOfCommentDTO = comments.stream()
                 .map(comment -> {
                     CommentDTO commentDTO = new CommentDTO();
                     commentDTO = commentMapper.entityToDTO(comment);
                     return commentDTO;
                 })
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
 
         commentsDTO.setCount(listOfCommentDTO.size());
         commentsDTO.setResults(listOfCommentDTO);

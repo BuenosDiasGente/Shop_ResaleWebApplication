@@ -35,6 +35,12 @@ public class CommentServiceImpl implements CommentService {
     private final UserRepository userRepository;
     private final CommentMapper commentMapper;
 
+    /**
+     * Метод получения всех комментариев объявления
+     * @param adId
+     *  @return List<Comment>
+     */
+
     @Override
     public List<Comment> getComments(Integer adId, Authentication authentication) {
 
@@ -46,6 +52,12 @@ public class CommentServiceImpl implements CommentService {
         return commentsByAdPk;
     }
 
+    /**
+     * Метод добавления комментария. Доступен только зарегистрированным пользователям и администраторам
+     * @param adId
+     * @param comment
+     * @param authentication
+     */
     @Override
     public Comment addComment(Integer adId, Comment comment, Authentication authentication) {
 
@@ -63,6 +75,11 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
+    /**
+     * Метод удаления комментария. Доступен только зарегистрированным пользователям user (только свой) admin (любой)
+     * @param adId
+     * @param commentId
+     */
     @Override
     @Transactional
     public void deleteComment(Integer adId, Integer commentId){
@@ -70,6 +87,14 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.deleteCommentByAd_PkAndId(adId, commentId);
     }
 
+
+    /**
+     * Метод изменения комментария. Доступен только зарегистрированным пользователям user (только свой) admin (любой)
+     * @param adId
+     * @param commentId
+     * @param createOrUpdateCommentDTO
+     * @param authentication
+     */
     @Override
     public CommentDTO patchComment(Integer adId, Integer commentId,
                                    CreateOrUpdateCommentDTO createOrUpdateCommentDTO,
