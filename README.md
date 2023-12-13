@@ -25,20 +25,21 @@ _Командная работа курса "Профессия  Java-разра
 
 Приложение функционирует с помощью запросов с localhost:3000 к эндпоинтам на localhost:8080.
 
-## **Спецификация:**
-https://github.com/BizinMitya/front-react-avito/blob/v1.21/openapi.yaml 
+### **Спецификация:**
+Функционал backend-части приложение разрабатывался под готовую [OpenAPI спецификацию](https://github.com/BizinMitya/front-react-avito/blob/v1.21/openapi.yaml)
 
-## **Запуск frontend c помощью Docker:**
- В командной строке (или Terminal IDEA) выполнить следующую команду:
- docker run -p 3000:3000 --rm ghcr.io/bizinmitya/front-react-avito:v1.21 
+### **Запуск frontend c помощью Docker:**
+ В командной строке (или Terminal IDEA) выполнить следующую команду:<br>
+' docker run -p 3000:3000 --rm ghcr.io/bizinmitya/front-react-avito:v1.21 '
 
 ## **Стек технологий**
 
-- _Язык и окружение_: Java 11, Spring Boot, Spring Web, Spring Data/JPQL/CreteriaAPI, Spring Security, Lombok, Hibernate, PostgreSQL, Swagger, Postman, FlyWay, Mapstruct, ExceptionHandler, Docker.
+- _Язык и окружение_: <br>
+Java 11, Spring Boot, Spring Web, Spring Data/JPQL/CreteriaAPI, Spring Security, Lombok, Hibernate, PostgreSQL, Swagger, Postman, FlyWay, Mapstruct, ExceptionHandler, Docker.
 
 - _Тестирование_: JUnit, Mockito,  h2database for tests, интеграционное тестирование
 
-## Команда разработки
+## Команда разработки:
 
 - Гудова Марина
 - Сторожилова Яна
