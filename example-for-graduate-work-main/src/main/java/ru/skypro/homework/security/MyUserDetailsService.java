@@ -15,6 +15,11 @@ import java.util.Optional;
 public class MyUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
+    /**
+     * создание и обновление пользователя
+     * @param username
+     * @return
+     */
     @Override
     public UserDetails loadUserByUsername(String username) {
         Optional<User> user = userRepository.findUserByUserName(username);

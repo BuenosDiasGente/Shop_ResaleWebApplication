@@ -8,19 +8,10 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.skypro.homework.constants.Role;
 import ru.skypro.homework.security.MyUserDetailsService;
-
-import javax.sql.DataSource;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -38,15 +29,6 @@ public class WebSecurityConfig { //extends WebSecurityConfigurerAdapter
             "/register", //NEW m
             "/users/image/**" //NEW M
     };
-
-//    @Bean
-//    public UserDetailsManager userDetailsManager(DataSource dataSource,
-//                                                 AuthenticationManager authenticationManager) {
-//        JdbcUserDetailsManager jdbcUserDetailsManager =
-//                new JdbcUserDetailsManager(dataSource);
-//        jdbcUserDetailsManager.setAuthenticationManager(authenticationManager);
-//        return jdbcUserDetailsManager;
-//    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)

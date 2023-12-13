@@ -66,7 +66,6 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     @Transactional
-    //@PreAuthorized (“hasRole(‘ADMIN’”)
     public boolean register(RegisterDTO registerDto) {
         log.info("AuthServiceImpl:-> register");
 
@@ -88,6 +87,7 @@ public class AuthServiceImpl implements AuthService {
         } else {
             log.info("New USER was created with username - {}", registerDto.getUsername());
         }
+        log.info("AuthServiceImpl:<-register");
         return true;
     }
 

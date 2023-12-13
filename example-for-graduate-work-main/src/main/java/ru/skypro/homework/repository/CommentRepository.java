@@ -17,13 +17,15 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
      */
     List<Comment> findCommentsByAd_Pk(Integer adId);
 
-    /**
-     * Получаем список комментариев из таблицы "comment" по ad_id объявления (внешний ключ) и id самого коммента
+    /***
+     * Получение комментария из б/д по id объявления, id автора и по id комментария
+     * @param adId
+     * @param idAuthor
+     * @param id
+     * @return
      */
-    Optional<Comment> findCommentByAd_PkAndId(Integer adId, Integer id);
-
     @Query(value = "SELECT c FROM Comment c WHERE c.ad.pk = :adId AND c.user.id = :idAuthor AND c.id = :id")
-    Comment findAllCommentByAdIdAndAuthorIdAndIdComment(Integer adId, Integer idAuthor,Integer id);
+    Comment findAllCommentByAdIdAndAuthorIdAndIdComment(Integer adId, Integer idAuthor, Integer id);
 
     /**
      * Удаляем комментарий из таблицы "comment" принадлежащий объявлению(внешний ключ pk) по id комментария
@@ -31,6 +33,4 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
     void deleteCommentByAd_PkAndId(Integer pk, Integer id);
 
 
-    @Query(value="DELETE FROM Comment c WHERE c.ad = :adId ")
-    void deleteComment(Integer adId);
 }

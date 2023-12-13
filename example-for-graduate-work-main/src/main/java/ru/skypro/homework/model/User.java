@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import ru.skypro.homework.constants.Role;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Data
@@ -15,7 +14,9 @@ import java.util.List;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "usersSequence", sequenceName = "users_sequence", allocationSize = 1,
+            initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usersSequence")
     private Integer id;
 
     @Column(name = "username", unique = true)

@@ -12,10 +12,8 @@ import java.util.Optional;
 @Repository
 public interface AdRepository extends JpaRepository<Ad, Integer> {
     @Query(value = "SELECT u FROM Ad u WHERE u.pk = :id")
-    Optional <Ad> findAdById(Integer id);
+    Optional<Ad> findAdById(Integer id);
 
-//    @Query(value ="DELETE FROM Ad c WHERE c.pk = :id")
-//    void deleteAdBy (Integer id);
     List<Ad> findAllByAuthor(User user);
 
 }

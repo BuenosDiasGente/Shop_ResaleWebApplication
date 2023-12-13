@@ -38,14 +38,8 @@ public interface CommentMapper {
     //Получение списка комментариев
     List<CommentDTO> commentsDTOToList(List<CommentDTO> comments);
 
-    //создание или обновление комментария
-   // @Mapping(target = "createdAt", qualifiedByName = "localDateTime")
     Comment CreateOrUpdateCommentDTOToEntity(CreateOrUpdateCommentDTO createOrUpdateCommentDTO);
 
-//    @Named("localDateTime")
-//    default St localDateTime(String dataTime) {
-//        return Integer.valueOf(parseInt(dataTime, 10));
-//    }
 
     }
 
