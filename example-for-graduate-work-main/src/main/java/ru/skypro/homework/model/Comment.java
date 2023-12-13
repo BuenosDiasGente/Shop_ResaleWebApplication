@@ -3,9 +3,6 @@ package ru.skypro.homework.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.bytebuddy.asm.Advice;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,12 +11,17 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name="comment")
 public class Comment {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "commentSequence", sequenceName = "comment_sequence", allocationSize = 1,
+            initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "commentSequence")
     private Integer id;  //id комментария
 
+    @Column(name="created_at")
     private LocalDateTime createdAt; //время создания объвления
+
     private String text; //текст объявления
 
     @ManyToOne (fetch = FetchType.LAZY)

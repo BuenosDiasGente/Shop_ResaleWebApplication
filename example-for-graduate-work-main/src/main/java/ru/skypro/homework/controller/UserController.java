@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDTO;
@@ -21,7 +20,6 @@ import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
 import javax.validation.Valid;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import static java.util.Objects.isNull;
@@ -128,7 +126,7 @@ public class UserController {
             }
     )
     @PatchMapping(value = "/me/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> updateUserImage(@RequestBody MultipartFile image, Authentication authentication) throws IOException {
+    public ResponseEntity<?> updateUserImage(@RequestBody MultipartFile image) throws IOException {
         if (isNull(image)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } else {

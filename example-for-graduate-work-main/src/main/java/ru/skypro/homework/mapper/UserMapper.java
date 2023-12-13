@@ -17,13 +17,15 @@ public interface UserMapper {
 
     @Mapping(target = "image", qualifiedByName = "pathToImageEntity")
     UserDTO usersEntityToUsersDto(User user);
+
     UpdateUserDTO userEntityToUpdateUsersDto(User user);
-    User updateUserDtoToUserEntity(UpdateUserDTO updateUserDTO);
-    @Mapping(target = "email", source = "username")//пишем для несовподающих полей
+
+    @Mapping(target = "email", source = "username")
+
     User registerDtoToUserEntity(RegisterDTO registerDTO);
 
     @Named("pathToImageEntity")
-    default String pathToImageEntity(Image image){
+    default String pathToImageEntity(Image image) {
         if (image == null) {
             return null;
         }

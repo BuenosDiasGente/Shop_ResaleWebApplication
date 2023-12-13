@@ -37,7 +37,7 @@ public class AuthController {
     /**
      * Регистрация пользователя
      * @param register
-     * @return status 2001 or 400
+     * @return status 201 or 400
      */
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterDTO register) {

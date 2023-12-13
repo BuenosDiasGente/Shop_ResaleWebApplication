@@ -113,12 +113,8 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Если, аутентификация прошла успешно — это значит, имя и пароль верные.
-     * Тогда объект Authentication сохраняется в SecurityContext, а тот, в свою очередь, — в SecurityContextHolder:
-     * Authentication-объект, отражающий информацию о текущем пользователе и его привилегиях.
-     * getPrincipal()-метод получения текущего пользователя
-     * После  успешной аутентификации в поле Principal объекта Authentication будет реальный пользователь в виде UserDetails:
-     *
+     * Получение у (текущего пользователя) Authentication объекта "Login",
+     * хранящийся в SecurityContextHolder.
      * @return UserDetails username
      */
 
