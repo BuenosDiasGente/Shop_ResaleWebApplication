@@ -30,7 +30,8 @@ _Командная работа курса "Профессия  Java-разра
 
 ### **Запуск frontend c помощью Docker:**
  В командной строке (или Terminal IDEA) выполнить следующую команду:<br>
-' docker run -p 3000:3000 --rm ghcr.io/bizinmitya/front-react-avito:v1.21 '
+ 
+`docker run -p 3000:3000 --rm ghcr.io/bizinmitya/front-react-avito:v1.21`
 
 ## **Стек технологий**
 
