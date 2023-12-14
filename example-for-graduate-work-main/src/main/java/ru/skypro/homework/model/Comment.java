@@ -29,7 +29,6 @@ public class Comment {
     private User user; //внешний ключ id пользователя, который разместил комментарий и стал автором
 
     @ManyToOne(fetch = FetchType.LAZY)
-   // @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "ad_id",nullable = false)
     private Ad ad; //внешний ключ id объявления, к которому разместили комментарии
 }

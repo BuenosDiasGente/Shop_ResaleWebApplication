@@ -15,11 +15,13 @@ import java.util.List;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface CommentMapper {
 
+    // вспомогательный метод по полученияю id user
     @Named("authorToInt")
     default Integer authorToInt(User user) {
         return user.getId();
     }
 
+    // вспомогательный метод для сохранения url image
     @Named("imageToString")
     default String imageToString(Image image) {
         if (image == null) {
@@ -32,11 +34,7 @@ public interface CommentMapper {
     @Mapping(target = "pk", source = "comment.id")
     @Mapping(target = "authorImage", source = "user.image", qualifiedByName = "imageToString")
     @Mapping(target = "authorFirstName", source = "user.firstName")
-  //   @Mapping(target = "createdAt", qualifiedByName = "localDateTime")
     CommentDTO entityToDTO(Comment comment);
-
-    //Получение списка комментариев
-    List<CommentDTO> commentsDTOToList(List<CommentDTO> comments);
 
     Comment CreateOrUpdateCommentDTOToEntity(CreateOrUpdateCommentDTO createOrUpdateCommentDTO);
 

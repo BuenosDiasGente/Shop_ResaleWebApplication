@@ -19,7 +19,6 @@ import ru.skypro.homework.service.CommentService;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,7 +82,6 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public void deleteComment(Integer adId, Integer commentId){
-        //здесь логика если админ можно удалять все, если юзер только свое
         commentRepository.deleteCommentByAd_PkAndId(adId, commentId);
     }
 
@@ -109,8 +107,6 @@ public class CommentServiceImpl implements CommentService {
         } else {
             comment.setText(createOrUpdateCommentDTO.getText());
 
-            //comment.setUser(user);
-         //   comment.setAd(ad);
             commentRepository.save(comment);
             return commentMapper.entityToDTO(comment);
 
