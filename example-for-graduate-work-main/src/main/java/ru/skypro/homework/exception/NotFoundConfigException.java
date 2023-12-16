@@ -1,8 +1,12 @@
 package ru.skypro.homework.exception;
 
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-@Getter
-public class NotFoundConfigException extends RuntimeException{
-    private final String NOT_FOUND_EXCEPTION_DESCRIPTION = "Данных для обновления не найдено";
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public class NotFoundConfigException extends RuntimeException {
+    public NotFoundConfigException(String message) {
+        super(message);
+    }
 }

@@ -29,7 +29,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.example.work_orders.controller.WorkOrdersController" level="error" additivity="false">
+    <logger name="com.example.work_orders.controller.WorkOrdersController" level="warn" additivity="false">
         <appender-ref ref="FILE_ERROR"/>
         <appender-ref ref="CONSOLE"/>
     </logger>

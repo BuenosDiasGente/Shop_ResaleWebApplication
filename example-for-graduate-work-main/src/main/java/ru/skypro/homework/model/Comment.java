@@ -5,24 +5,30 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name="comment")
 public class Comment {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "commentSequence", sequenceName = "comment_sequence", allocationSize = 1,
+            initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "commentSequence")
     private Integer id;  //id комментария
 
-    private Integer createdAt; //время создания объвления
+    @Column(name="created_at")
+    private LocalDateTime createdAt; //время создания объвления
+
     private String text; //текст объявления
 
-    @ManyToOne
-    @JoinColumn(name = "users_id")
-    private User user; //внешний ключ id пользователя, который размести комментарий и стал автором
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn(name = "users_id",nullable = false)
+    private User user; //внешний ключ id пользователя, который разместил комментарий и стал автором
 
-    @ManyToOne
-    @JoinColumn(name = "ad_id")
-    private Ad ad; //внешний ключ id объявления, к которому разместили комментарии*/ // видимо это тоже лишнее, мы можем добраться через юзера
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ad_id",nullable = false)
+    private Ad ad; //внешний ключ id объявления, к которому разместили комментарии
 }

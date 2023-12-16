@@ -9,7 +9,9 @@ import ru.skypro.homework.model.Image;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.service.ImageService;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
+import java.rmi.NotBoundException;
 
 import static java.util.Objects.isNull;
 
@@ -20,11 +22,15 @@ public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepository;
 
     @Override
-    public Image saveToDb(MultipartFile multipartFile) throws IOException {
+    public Image saveToDb(MultipartFile multipartFile) {
         log.info("ImageServiceImpl : ->saveToDb");
 
         Image image = new Image();
-        image.setImage(multipartFile.getBytes());
+        try {
+            image.setImage(multipartFile.getBytes());
+        } catch (IOException e) {
+            log.error("ImageServiceImpl: saveToDb: 'multipartFile' IOException");
+        }
 
         log.info("ImageServiceImpl : <- saveToDo");
         return imageRepository.save(image);
@@ -33,13 +39,13 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public byte[] getById(Integer id) {
         log.info("ImageServiceImpl : ->getById");
-        Image imageById = imageRepository.findImageById(id);
-//        if (isNull(imageById)) {
-//            throw new
-//        }
+
+            Image imageById = imageRepository.findImageById(id);
+
+        //    log.error("ImageServiceImpl: getById: 'imageById' NotFoundException");
+
         log.info("ImageServiceImpl : <- getById");
         return imageById.getImage();
     }
-
 
 }

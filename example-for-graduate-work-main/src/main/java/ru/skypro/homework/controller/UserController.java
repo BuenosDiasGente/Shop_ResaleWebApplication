@@ -20,7 +20,6 @@ import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
 import javax.validation.Valid;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import static java.util.Objects.isNull;
@@ -84,8 +83,8 @@ public class UserController {
 
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getUser() {
-        userService.getUser();
-        return ResponseEntity.ok().build();
+
+        return ResponseEntity.ok(userService.getUser());
     }
 
 
@@ -109,8 +108,8 @@ public class UserController {
 
     @PatchMapping("/me")
     public ResponseEntity<UpdateUserDTO> updateUser(@RequestBody @Valid UpdateUserDTO updateUserDTO) {
-        userService.updateUser(updateUserDTO);
-        return ResponseEntity.ok().build();
+
+        return ResponseEntity.ok(userService.updateUser(updateUserDTO));
     }
 
     @Operation(
@@ -131,8 +130,8 @@ public class UserController {
         if (isNull(image)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } else {
-            userService.updateUserImage(image);
-            return ResponseEntity.ok().build();
+
+            return ResponseEntity.ok(userService.updateUserImage(image));
         }
     }
 
@@ -152,10 +151,9 @@ public class UserController {
     )
     @GetMapping("me/image/{id}")
     public ResponseEntity<byte[]> getImageById(@PathVariable int id) {
-        try{
-            return new ResponseEntity<>(imageService.getById(id),HttpStatus.OK);
-        }
-        catch (RuntimeException e){
+        try {
+            return new ResponseEntity<>(imageService.getById(id), HttpStatus.OK);
+        } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
