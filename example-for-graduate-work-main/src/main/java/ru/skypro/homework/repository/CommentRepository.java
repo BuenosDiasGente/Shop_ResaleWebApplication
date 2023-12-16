@@ -2,18 +2,17 @@ package ru.skypro.homework.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.skypro.homework.model.Comment;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
     /**
      * Получаем список комментариев из таблицы "comment" по id объявления (внешний ключ)
+     * @param adId
+     * @return List<Comment>
      */
     List<Comment> findCommentsByAd_Pk(Integer adId);
 
@@ -29,6 +28,8 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
     /**
      * Удаляем комментарий из таблицы "comment" принадлежащий объявлению(внешний ключ pk) по id комментария
+     * @param pk
+     * @param id
      */
     void deleteCommentByAd_PkAndId(Integer pk, Integer id);
 

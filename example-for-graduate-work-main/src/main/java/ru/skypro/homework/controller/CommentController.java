@@ -20,7 +20,6 @@ import ru.skypro.homework.service.CommentService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -70,13 +69,6 @@ public class CommentController {
             commentDTO = commentMapper.entityToDTO(comment);
             listOfCommentDTO.add(commentDTO);
         }
-       /* List<CommentDTO> listOfCommentDTO = comments.stream()
-                .map(comment -> {
-                    CommentDTO commentDTO = new CommentDTO();
-                    commentDTO = commentMapper.entityToDTO(comment);
-                    return commentDTO;
-                })
-                .collect(Collectors.toList());*/
 
         commentsDTO.setCount(listOfCommentDTO.size());
         commentsDTO.setResults(listOfCommentDTO);
@@ -189,15 +181,6 @@ public class CommentController {
                                                    @RequestBody CreateOrUpdateCommentDTO createOrUpdateCommentDTO,
                                                    Authentication authentication) {
 
-//        Comment comment = commentMapper.CreateOrUpdateCommentDTOToEntity(createOrUpdateCommentDTO);
-//        commentService.patchComment(adId, commentId, comment, authentication);
-//        CommentDTO commentDTO = commentMapper.entityToDTO(comment);
-
-//        if (commentDTO != null) {
-//            return ResponseEntity.ok(commentDTO);
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
         return ResponseEntity.ok(commentService.patchComment(adId, commentId, createOrUpdateCommentDTO, authentication));
 
     }
