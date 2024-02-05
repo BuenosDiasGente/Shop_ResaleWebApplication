@@ -38,8 +38,6 @@ _Командная работа курса "Профессия  Java-разра
 - _Язык и окружение_: <br>
 Java 11, Spring Boot, Spring Web, Spring Data/JPQL/CreteriaAPI, Spring Security, Lombok, Hibernate, PostgreSQL, Swagger, Postman, FlyWay, Mapstruct, ExceptionHandler, Docker.
 
-- _Тестирование_: JUnit, Mockito,  h2database for tests, интеграционное тестирование
-
 ## Команда разработки:
 
 - Гудова Марина
